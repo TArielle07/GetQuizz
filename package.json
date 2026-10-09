@@ -1,0 +1,26 @@
+{
+  "name": "getquizz",
+  "version": "1.0.0",
+  "description": "Site web simulant un module de gestions d'examens et de questionnaires en ligne. Une application web où l'enseignant depuis son espace personnel, conçoit des quiz puis les étudiants",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TArielle07/GetQuizz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TArielle07/GetQuizz/issues"
+  },
+  "homepage": "https://github.com/TArielle07/GetQuizz#readme",
+  "dependencies": {
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.11.1"
+  }
+}
