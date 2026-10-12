@@ -7,22 +7,25 @@
 </head>
 <body>
   <main class="panneau">
-    <form id="signup" autocomplete="on">
+    <form id="signup">
       <h1>GetQuizz</h1>
 
       <div class="field">
         <label for="email">Adresse courriel</label>
         <input id="email" name="email" type="email" placeholder="Entrez votre email" autocomplete="email" required>
+        <div class="field-error" data-js-error></div>
       </div>
 
       <div class="field">
         <label for="password">Mot de passe</label>
         <input id="password" name="password" type="password" placeholder="Entrez votre mot de passe" autocomplete="new-password" minlength="8" required>
+        <div class="field-error" data-js-error></div>
       </div>
 
       <div class="field">
         <label for="password">Confirmer le mot de passe</label>
         <input id="password2" name="password2" type="password2" placeholder="Entrez à nouveau votre mot de passe" autocomplete="new-password" minlength="8" required>
+        <div class="field-error" data-js-error></div>
       </div>
 
       <button class="signup" type="submit">S'inscrire</button>
