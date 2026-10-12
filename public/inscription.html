@@ -3,37 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GetQuizz -Inscription</title>
+<title>GetQuizz - Inscription</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <!--CSS-->
-    <link rel="stylesheet" href="css/style_connexion.css">
+<link rel="stylesheet" href="css/style_connexion.css">
 </head>
 <body>
   <main class="panneau">
-    <form id="signup">
-      <h1><img class="logo" src="GetQuiz_logo.png"alt="GetQuizz"></h1>
+    <form id="connexion">
+      <h1><img class="logo" src="GetQuiz_logo.png" alt="GetQuizz"></h1>
 
-      <div class="field">
-        <label for="email">Adresse courriel</label>
-        <input id="email" name="email" type="email" placeholder="Entrez votre email" autocomplete="email" required>
+      <div class="field" data-js-field>
+        <label for="nom">Nom <span class="required">*</span></label>
+        <input id="nom" name="nom" type="text" placeholder="Entrez votre nom" autocomplete="username" required>
         <div class="field-error" data-js-error></div>
       </div>
 
-      <div class="field">
-        <label for="password">Mot de passe</label>
+      <div class="field" data-js-field>
+        <label for="password">Mot de passe <span class="required">*</span></label>
         <input id="password" name="password" type="password" placeholder="Entrez votre mot de passe" autocomplete="new-password" minlength="8" required>
         <div class="field-error" data-js-error></div>
       </div>
 
-      <div class="field">
-        <label for="password">Confirmer le mot de passe</label>
-        <input id="password" name="password" type="password" placeholder="Entrez à nouveau votre mot de passe" autocomplete="new-password" minlength="8" required>
+      <div class="field" data-js-field>
+        <label for="confirm">Confirmer le mot de passe <span class="required">*</span></label>
+        <input id="confirm" name="confirm" type="password" placeholder="Entrez à nouveau votre mot de passe" autocomplete="new-password" minlength="8" required>
         <div class="field-error" data-js-error></div>
       </div>
 
-
-       <div class="field" data-js-field>
+      <div class="field" data-js-field>
         <label>Je suis un <span class="required">*</span></label>
         <div class="radio-group" data-js-radio>
           <label><input type="radio" name="role" value="eleve"> Élève</label>
@@ -44,14 +43,12 @@
 
       <button class="signup" type="submit">S'inscrire</button>
 
-
-      <p class="signin">Avez-vous déja un compte? <a href="connexion.html">Se connecter</a></p>
+      <p class="signin">Avez-vous déjà un compte ? <a href="connexion.html">Se connecter</a></p>
     </form>
   </main>
 
- <img src="imageGetQuiz.avif" alt="Deux étudiants révisent sur une pelouse" class="image-connexion">
+  <img src="imageGetQuiz.avif" alt="Deux étudiants révisent sur une pelouse" class="image-connexion">
 
- <script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
