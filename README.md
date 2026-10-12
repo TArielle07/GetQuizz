@@ -5,5 +5,10 @@ Gaelle Baman
 Aujourdh'ui, j'ai fait je squelette de script.js. Les vraies informations seront rajouter plus tard, quand les autres auront un peu avancés.
 
 Frontend : 
+09/11/2026
 On a fait une création de formulaire pour html qui permet de s'inscrire et pouvoir faire se connecter si le compte est existant. 
+10/11/2026
+Grace
+Aujourd'hui, je me suis occupé du dashboard Enseignant. La création est simple, faire une page création du quiz. J'ai ajouté une partie sidebar qui va etre utilisé selon le besoin que nous voulons faire : créer des quiz, voir nos quiz, regarder notre tableau de bord. Le logo a été aussi rajouter. J'ai mis un footer aussi. 
+
 
