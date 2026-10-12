@@ -1,3 +1,7 @@
+const dns = require('dns');
+dns.serServers(['8.8.8.8', '1.1.1.1']); //Ceci est pour corriger l'erreur querySrv
+
+
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -26,8 +30,13 @@ app.get('/', (req, res) => {
 
 // Démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
+    .then(async() => {
         console.loog('Connecté à MongoDB');
+
+        //Test affichage users
+        const users = await User.find();
+        console.log(users);
+
         app.listen(PORT, () => {
         console.log(`Serveur GetQuizz lancé sur http://localhost:${PORT}`);
         });
