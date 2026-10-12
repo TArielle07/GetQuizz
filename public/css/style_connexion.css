@@ -60,8 +60,9 @@ label {
     font-weight: 700;
 }
 
-input[type="email"],
-input[type="password"] {
+/* Tous les champs : nom (text), courriel, mot de passe, confirmation...
+   (les boutons radio et cases à cocher sont exclus) */
+input:not([type="checkbox"]):not([type="radio"]) {
     width: 100%;
     height: 52px;
     padding: 0 14px;
@@ -86,35 +87,18 @@ button:focus-visible {
     outline-offset: 2px;
 }
 
-/* Case Professeur (inscription seulement) */
-.field-checkbox {
+/* Boutons radio : apparence par défaut du navigateur, alignés côte à côte */
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-group label {
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.field-checkbox label {
+    gap: 8px;
     font-size: 14px;
     cursor: pointer;
-}
-
-input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    margin: 0;
-    background-color: #ffffff;
-    border: 2px solid #cfcfcf;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-input[type="checkbox"]:checked {
-    background-color: #F8B9CA;
-    border-color: #35484B;
-    box-shadow: inset 0 0 0 4px #ffffff;
 }
 
 /* Bouton (S'inscrire / Se connecter) */
@@ -177,9 +161,16 @@ a {
     display: block;
 }
 
-.field.invalid input[type="email"],
-.field.invalid input[type="password"] {
+.field.invalid input:not([type="checkbox"]):not([type="radio"]) {
     box-shadow: 0 0 0 2px #C62828;
+}
+
+/* Message d'erreur de la page de connexion (<p id="messageErreur">) :
+   visible seulement quand script.js y écrit un texte */
+#messageErreur:not(:empty) {
+    display: block;
+    margin: 0;
+    text-align: center;
 }
 
 /* Image : remplit toute la colonne de droite */
