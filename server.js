@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 // Démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
     .then(async() => {
-        console.loog('Connecté à MongoDB');
+        console.log('Connecté à MongoDB');
 
         //Test affichage users
         const users = await User.find();
