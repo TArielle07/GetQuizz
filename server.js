@@ -1,5 +1,5 @@
 const dns = require('dns');
-dns.serServers(['8.8.8.8', '1.1.1.1']); //Ceci est pour corriger l'erreur querySrv
+dns.setServers(['8.8.8.8', '1.1.1.1']); //Ceci est pour corriger l'erreur querySrv
 
 
 const express = require('express');
