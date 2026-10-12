@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enseignant</title>
+
+    <!--fonts et logo-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="grid-container">
+        <!--Sidebar-->
+        <aside id="sidebar">
+        <img src="GetQuiz_logo.png" alt="GetQuiz">
+        <div class="profil">
+            <!--Le cercle restera rose (si vous voulez changer la couleur ou mettre une photo de profil, on peut voir ca apres)-->
+           <div class="profil-cercle"></div>
+           <!--Le nom du profil utilisateur doit changer selon le nom utilisé dans la connexion/inscription-->
+           <span class="nom-utilisateur">Gaelle</span>
+        </div>
+        <ul class="sidebar-list">
+            <li class="sidebar-item">Tableau de bord</li>
+            <li class="sidebar-item">Mes quiz</li>
+            <li class="sidebar-item">Créer un quiz</li>
+        </ul>
+        
+        <a href="deconnexion.html" class="btn-deconnexion">Déconnexion</a>
+        </aside>
+        <!--End Sidebar-->
+
+        <!--main-->
+        <main class="main-container">
+        <form id="form-quiz" class="formulaire">
+        
+        <!--Section 1 -> occuper du css-->
+        <div class="section-1">
+            <h2>Créer un quiz</h2>
+            <button type="submit" name="action" value="brouillon" formnovalidate>Enregistrer un brouillon</button>
+            <button type="submit" name="action" value="publier">Publier</button>
+        </div>
+
+        <div class="section-2">
+            <div class="champ">
+                <label for="titre-quiz">Titre du quiz</label> 
+                <input type="text" id="titre-quiz" name="titre-quiz" placeholder="[Titre du quiz]" required>
+            </div>
+               
+            <div class="ligne-2-champs">
+                <div class="champ">
+                    <label for="theme-quiz">Thème</label>
+                    <input type="text" id="theme-quiz" name="theme-quiz" placeholder="[Thème du quiz]" required>                </div>
+
+                <div class="champ">
+                    <!--Si le quiz est facile, moyen-->
+                    <label for="barre-echelle">Difficulté du quiz</label>
+                    <select id="barre-echelle" name="barre-echelle">
+                    <option value="barre-echelle" selected>Choisir la difficulté du quiz</option>
+                    <option value="facile">Facile</option>
+                    <option value="moyen">Moyen</option>
+                    <option value="difficile">Difficile</option>
+                    </select> 
+                </div>
+            </div>
+            
+                 
+        </div>
+
+        <!--Section 2 questions -> CSS-->
+
+        <div class="section-2-question">
+
+            <div class="cote-questionnaire">
+                <h3 id="q1-titre">Question 1</h3>
+                <button type="button" class="btn-supprimer">Supprimer</button>
+            </div>
+
+            <div class="champ">
+                <label for="q1-texte">Intitulé de la qurestion</label> 
+                <input type="text" id="q1-texte" name="q1-texte"> 
+            </div>
+            
+            <div class="champ">
+            <label for="q1-reponse-a">Réponses (cochez la bonne réponse)</label>
+                 <div class="reponses-grille">
+                <div class="reponse">
+                    <input type="radio" name="q1-bonne" value="a" required aria-label="Bonne réponse A">
+                    <input type="text" name="q1-reponse-a" placeholder="[Réponse 1]" required>
+                </div>
+
+                <div class="reponse">
+                    <input type="radio" name="q1-bonne" value="b" aria-label="Bonne réponse B">
+                    <input type="text" name="q1-reponse-b" placeholder="[Réponse 2]" required>
+                </div>
+
+                <div class="reponse">
+                    <input type="radio" name="q1-bonne" value="c" aria-label="Bonne réponse C">
+                    <input type="text" name="q1-reponse-c" placeholder="[Réponse 3]" required>
+                </div>
+
+                <div class="reponse">
+                    <input type="radio" name="q1-bonne" value="d" aria-label="Bonne réponse D">
+                    <input type="text" name="q1-reponse-d" placeholder="[Réponse 4]" required>
+                </div>
+             </div>
+            </div>
+            
+        </div>
+        </form>
+        
+        <button type="button" id="btn-ajouter-question" class="btn-ajouter">+ Ajouter une question</button>
+        </main>
+        
+         <!-- End main-->
+        
+        <footer class="footer">
+         <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+<script src="script.js"></script>    
+</body>
+</html>

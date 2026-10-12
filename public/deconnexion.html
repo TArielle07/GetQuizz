@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GetQuizz</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/deconnexion.css">
+</head>
+<body>
+    <main class="panneau">
+        <form id="connexion" autocomplete="on">
+            <h1>
+                 <img src="GetQuiz_logo.png" alt="GetQuizz" class="logo">
+            </h1>
+
+            <div class="field">
+                <label for="email">Adresse courriel</label>
+                <input id="email" name="email" type="email" placeholder="Entrez votre email" autocomplete="email" required>
+            </div>
+
+            <div class="field">
+                <label for="password">Mot de passe</label>
+                <input id="password" name="password" type="password" placeholder="Entrez votre mot de passe" autocomplete="current-password" required>
+            </div>
+
+            <div class="field-checkbox">
+                <input id="professeur" name="professeur" type="checkbox">
+                <label for="professeur">Professeur</label>
+            </div>
+
+            <button class="signup" type="submit">Se connecter</button>
+        </form>
+    </main>
+     <img src="imageGetQuiz.avif" alt="Deux étudiants révisent sur une pelouse" class="image-connexion">
+
+</body>
+</html>

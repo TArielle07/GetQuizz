@@ -1,0 +1,325 @@
+/*--Dashboard de l'enseignant --*/
+/*-- les comments --*/
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7fbfb;
+    color : #35484B; 
+    font-family: "Quicksand", sans-serif;
+
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 1fr 70px;
+    grid-template-areas:
+        "sidebar main"
+        "sidebar footer";
+    height: 100vh;
+}
+
+                                                         /*-----------------Sidebar------------------*/
+#sidebar {
+    grid-area: sidebar;
+    background-color:#9EE2DB;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+
+}
+/*logo*/
+#sidebar img {
+    display: block; 
+    width: 70%;
+    max-width: 180px;
+    height: auto;
+    margin: 15px auto;
+}
+/*coté profil*/
+.profil-cercle {
+    width: 45px; 
+    height: 45px; 
+    background-color: #F8B9CA; 
+    border-radius: 50%;
+}
+.nom-utilisateur {
+    font-size: 25px;
+    font-weight: 700;
+}
+.profil {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    padding: 10px 20px;
+    font-size: medium;
+}
+/*les listes*/
+.sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+}
+.sidebar-item {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.sidebar-item:hover {
+    background-color: #f7fbfb;
+    transform: translateX(4px);
+
+}
+
+.sidebar-item.active {
+    background-color: #ffffff;
+    transform: none;
+}
+
+/*Bouton deconnexion*/
+.btn-deconnexion {
+    display: block;                 
+    margin: auto 12px 0;           
+    padding: 12px 20px;             
+    font-size: 20px;
+    font-weight: 500;
+    color: #35484B;
+    text-decoration: none;          /* enlève le soulignement */
+    border-radius: 6px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-deconnexion:hover {
+    background-color: #f7fbfb;
+    transform: translateX(4px);     /* même animation que le menu */
+}
+
+
+                                         /*-------------Partie de la page création de quiz------------------*/
+.main-container {
+    grid-area: main;
+    background-color: #f7fbfb;
+    padding: 32px; 
+    overflow-y: auto;
+
+}
+
+/*-- Section 1 de main-container --*/
+.section-1 {
+     padding: 24px 32px;
+     display: flex;
+     gap: 12px;
+     align-items: center;
+     justify-content: space-between;
+     padding: 0 0 20px; 
+}
+
+.section-1 h2 {
+    color: #35484B;
+    margin-right: auto;
+}
+
+.section-1 button {
+    padding: 12px 12px;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+    color: #35484B;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+/*-- Appeler les buttons selon les values -> changer de couleur --*/
+.section-1 button[value="brouillon"] {
+    background-color: #9EE2DB;
+}
+.section-1 button[value="publier"] {
+    background-color: #F8B9CA;
+}
+/*-- Animation sur les buttons --*/
+.section-1 button:hover {
+    filter: brightness(0.95);
+}
+
+/*-- SECTION 2 --*/
+* {
+    box-sizing: border-box;
+}
+.section-2 {
+    background-color: #d2f4f0;
+    border-radius: 10px;
+    padding: 16px;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+}
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.champ label {
+    font-size: 13px;
+}
+.ligne-2-champs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.section-2 input,
+.section-2 select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 14px;
+    color: #35484B;
+}
+
+/*SECTION 2 QUESTIONS*/
+.section-2-question {
+    background-color: #F8B9CA;
+    border-radius: 10px;
+    padding: 16px;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+}
+
+.cote-questionnaire {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.cote-questionnaire h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.btn-supprimer {
+    padding: 8px 12px;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #35484B;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-supprimer:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Les 4 réponses en 2 colonnes */
+.reponses-grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;      /* 10px entre les lignes, 16px entre les colonnes */
+}
+
+.reponse {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Tous les champs texte de la carte : blancs, sans bordure */
+.section-2-question input[type="text"] {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+}
+.section-2-question input,
+.section-2-question button,
+.section-2-question label {
+    font-family: inherit;
+    font-weight: inherit;
+}
+
+.reponse input[type="text"] {
+    flex: 1;
+    width: auto;
+}
+
+/* Les boutons radio : cercle blanc */
+.reponse input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    background-color: #ffffff;
+    border: 2px solid #cfcfcf;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.reponse input[type="radio"]:checked {
+    border-color: #35484B;
+    background-color: #9EE2DB;
+    box-shadow: inset 0 0 0 4px #ffffff;   /* petit cercle turquoise au centre */
+}
+
+.btn-ajouter {
+    margin: 0;
+    padding: 12px 20px;
+    background-color: #9EE2DB;
+    border: 0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: #35484B;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.btn-ajouter:hover {
+    filter: brightness(0.95);
+}
+
+.footer {
+    grid-area: footer;
+    background-color: #dafbf7;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 13px;
+}
+
+.footer-copy {
+    margin: 0;
+}
+
