@@ -11,26 +11,24 @@
 </head>
 <body>
   <main class="panneau">
-    <form id="signup">
-      <h1><img class="logo" src="GetQuiz_logo.png" alt="GetQuizz"></h1>
-
-      <div class="field">
-        <label for="email">Adresse courriel</label>
-        <input id="email" name="email" type="email" placeholder="Entrez votre email" autocomplete="email" required>
-        <div class="field-error" data-js-error></div>
-      </div>
-
-      <div class="field">
-        <label for="password">Mot de passe</label>
-        <input id="password" name="password" type="password" placeholder="Entrez votre mot de passe" autocomplete="new-password" minlength="8" required>
-        <div class="field-error" data-js-error></div>
-      </div>
-
-      <button class="signup" type="submit">Se connecter</button>
-
-
-      <p class="signup-link">Pas encore de compte ? <a href="inscription.html">S'inscrire</a></p>
-    </form>
+    <form id="connexion">
+  <h1><img class="logo" src="GetQuiz_logo.png" alt="GetQuizz"></h1>
+  <div class="field">
+    <label for="nom">Nom</label>
+    <input id="nom" name="nom" type="text"
+           placeholder="Entrez votre nom"
+           autocomplete="username" required>
+  </div>
+  <div class="field">
+    <label for="password">Mot de passe</label>
+    <input id="password" name="password" type="password"
+           placeholder="Entrez votre mot de passe"
+           autocomplete="current-password" required>
+  </div>
+  <p id="messageErreur" class="field-error"></p>
+  <button class="signup" type="submit">Se connecter</button>
+  <p class="signup-link">Pas encore de compte ? <a href="inscription.html">S'inscrire</a></p>
+</form>
   </main>
 
 <img src="imageGetQuiz.avif" alt="Deux étudiants révisent sur une pelouse" class="image-connexion">
