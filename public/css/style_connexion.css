@@ -1,0 +1,214 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Page : fond rose, formulaire à gauche et image à droite */
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: #FDDDE6;
+    color: #35484B;
+    font-family: "Quicksand", sans-serif;
+}
+
+/* Colonne du formulaire : le panneau est centré */
+.panneau {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+}
+
+/* Panneau avec une ombre noire en relief */
+form {
+    width: 100%;
+    max-width: 520px;
+    padding: 48px 44px;
+    background-color: #d2f4f0;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 10px 10px 0 #000000;
+}
+
+/* Le titre contient le logo */
+h1 {
+    margin: 0 0 8px;
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    width: 260px;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* Un label + son champ */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    height: 52px;
+    padding: 0 14px;
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: #35484B;
+}
+
+input::placeholder {
+    color: #757575;
+    opacity: 1;
+}
+
+/* Contour visible quand on navigue au clavier */
+input:focus-visible,
+button:focus-visible {
+    outline: 3px solid #F8B9CA;
+    outline-offset: 2px;
+}
+
+/* Case Professeur (inscription seulement) */
+.field-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.field-checkbox label {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    background-color: #ffffff;
+    border: 2px solid #cfcfcf;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #F8B9CA;
+    border-color: #35484B;
+    box-shadow: inset 0 0 0 4px #ffffff;
+}
+
+/* Bouton (S'inscrire / Se connecter) */
+.signup {
+    height: 52px;
+    margin-top: 8px;
+    background-color: #F8B9CA;
+    border: 0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    color: #35484B;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.signup:hover {
+    filter: brightness(0.95);
+}
+
+/* ----- Aide, liens, erreurs ----- */
+small {
+    font-size: 12px;
+    font-weight: 500;
+    color: #757575;
+}
+
+a {
+    color: #35484B;
+    font-weight: 700;
+}
+
+.forgot {
+    margin: 0;
+    text-align: right;
+    font-size: 13px;
+}
+
+.signin,
+.signup-link {
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+}
+
+.required {
+    color: #C62828;
+}
+
+/* Message d'erreur : caché tant que le champ est valide */
+.field-error {
+    display: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: #C62828;
+}
+
+.field.invalid .field-error {
+    display: block;
+}
+
+.field.invalid input[type="email"],
+.field.invalid input[type="password"] {
+    box-shadow: 0 0 0 2px #C62828;
+}
+
+/* Image : remplit toute la colonne de droite */
+.image-connexion {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Petit écran : une seule colonne, sans l'image */
+@media (max-width: 800px) {
+    body {
+        grid-template-columns: 1fr;
+    }
+
+    .image-connexion {
+        display: none;
+    }
+
+    form {
+        padding: 32px 24px;
+        box-shadow: 6px 6px 0 #000000;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .signup {
+        transition: none;
+    }
+}
