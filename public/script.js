@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api";
+const API_URL = "/api";
 
 /* =========================================================
    PAGE DE CONNEXION (login.html) — Front 1
@@ -8,7 +8,7 @@ let elFormConnexion = document.querySelector("#connexion");
 let elNom = document.querySelector("#nom");
 let elMotDePasse = document.querySelector("#password");
 let elMessageErreur = document.querySelector("#messageErreur");
-git
+
 // On vérifie que le formulaire existe (il est seulement dans login.html)
 if (elFormConnexion) {
     elFormConnexion.addEventListener("submit", async (e) => {
@@ -37,12 +37,12 @@ if (elFormConnexion) {
 
         if (ok) {
             try {
-                let reponse = await fetch(API_URL + "/login", {
+                let reponse = await fetch(API_URL + "/connexion", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         nom: elNom.value.trim(),
-                        mot_de_passe: elMotDePasse.value
+                        motDePasse: elMotDePasse.value
                     })
                 });
                 if (!reponse.ok) throw new Error();
@@ -66,7 +66,7 @@ if (elFormConnexion) {
    PAGE ENSEIGNANT (enseignant.html) — Front 2
    ========================================================= */
 
-let elDashboard = document.querySelector("#dashboard");
+/*let elDashboard = document.querySelector("#dashboard");
 
 // Si quelqu'un ouvre le dashboard sans être connecté, retour à la connexion
 if (elDashboard) {
@@ -94,6 +94,19 @@ if (elBtnDeconnexion) {
         }
         window.location.href = "login.html";
     });
+}*/
+
+let elNomUtilisateur = document.querySelector("#nomUtilisateur");
+
+// Afficher le nom de la personne connectée
+if (elNomUtilisateur) {
+    fetch(API_URL + "/moi")
+        .then(reponse => reponse.json())
+        .then(utilisateur => {
+            if (utilisateur.nom) {
+                elNomUtilisateur.textContent = utilisateur.nom;
+            }
+        });
 }
 
 // TODO Sprint 2 : afficher les quiz de l'enseignant
