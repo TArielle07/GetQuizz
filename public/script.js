@@ -4,31 +4,35 @@ const API_URL = "http://localhost:3000/api";
    PAGE DE CONNEXION (login.html) — Front 1
    ========================================================= */
 
-let elFormConnexion = document.querySelector("#form-connexion");
-let elEmail = document.querySelector("#email");
-let elMotDePasse = document.querySelector("#mot-de-passe");
-let elStatus = document.querySelector("#status");
-
+let elFormConnexion = document.querySelector("#connexion");
+let elNom = document.querySelector("#nom");
+let elMotDePasse = document.querySelector("#password");
+let elMessageErreur = document.querySelector("#messageErreur");
+git
 // On vérifie que le formulaire existe (il est seulement dans login.html)
 if (elFormConnexion) {
     elFormConnexion.addEventListener("submit", async (e) => {
         e.preventDefault();
         let ok = true;
-        elEmail.classList.remove("erreur");
+
+        // On efface les anciennes erreurs
+        elMessageErreur.textContent = "";
+        elNom.classList.remove("erreur");
         elMotDePasse.classList.remove("erreur");
 
         // Validation des champs
-        if (elEmail.value.trim().length === 0) {
-            elStatus.textContent = "Veuillez entrer votre courriel";
-            elStatus.style.color = "orange";
-            elEmail.classList.add("erreur");
+        if (elNom.value.trim().length === 0) {
+            elMessageErreur.textContent = "Veuillez entrer votre nom";
+            elNom.classList.add("erreur");
             ok = false;
         }
         if (elMotDePasse.value.length === 0) {
-            elStatus.textContent = "Veuillez entrer votre mot de passe";
-            elStatus.style.color = "orange";
+            elMessageErreur.textContent = "Veuillez entrer votre mot de passe";
             elMotDePasse.classList.add("erreur");
             ok = false;
+        }
+        if (elNom.value.trim().length === 0 && elMotDePasse.value.length === 0) {
+            elMessageErreur.textContent = "Veuillez remplir tous les champs";
         }
 
         if (ok) {
@@ -37,8 +41,8 @@ if (elFormConnexion) {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        email: elEmail.value.trim(),
-                        motDePasse: elMotDePasse.value
+                        nom: elNom.value.trim(),
+                        mot_de_passe: elMotDePasse.value
                     })
                 });
                 if (!reponse.ok) throw new Error();
@@ -52,8 +56,7 @@ if (elFormConnexion) {
                     window.location.href = "etudiant.html";
                 }
             } catch (error) {
-                elStatus.textContent = "Courriel ou mot de passe incorrect";
-                elStatus.style.color = "red";
+                elMessageErreur.textContent = "Nom ou mot de passe incorrect";
             }
         }
     });
@@ -63,9 +66,25 @@ if (elFormConnexion) {
    PAGE ENSEIGNANT (enseignant.html) — Front 2
    ========================================================= */
 
+let elDashboard = document.querySelector("#dashboard");
+
+// Si quelqu'un ouvre le dashboard sans être connecté, retour à la connexion
+if (elDashboard) {
+    verifierConnexion();
+}
+
+async function verifierConnexion() {
+    try {
+        let reponse = await fetch(API_URL + "/me");
+        if (!reponse.ok) throw new Error();
+    } catch (error) {
+        window.location.href = "login.html";
+    }
+}
+
 let elBtnDeconnexion = document.querySelector("#btn-deconnexion");
 
-// Le bouton est dans enseignant.html et etudiant.html
+// Le bouton est dans enseignant.html (et plus tard etudiant.html)
 if (elBtnDeconnexion) {
     elBtnDeconnexion.addEventListener("click", async () => {
         try {
