@@ -1,5 +1,4 @@
-const dns = require('dns');
-dns.setServers(['8.8.8.8', '1.1.1.1']);
+
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -109,9 +108,9 @@ function verifierEnseignant(req, res, next) {
     next();
 }
 
-// Exemple de route protégée pour les enseignants
-app.get('/api/moi', verifierConnexion, verifierEnseignant, (req, res) => {
-    res.json({
+// Exemple de route protégée 
+app.get('/api/moi', verifierConnexion, (req, res) => {
+        res.json({
         nom: req.session.utilisateur.nom,
         role: req.session.utilisateur.role
     });
