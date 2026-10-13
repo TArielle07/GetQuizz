@@ -136,6 +136,47 @@ app.post('/api/logout', (req, res) => {
     });
 });
 
+// Connexion d'un utilisateur
+app.post('/api/login', async (req, res) => {
+    try {
+        const { nom, motDePasse } = req.body;
+
+        if (!nom || !motDePasse) {
+            return res.status(400).json({ message: 'Veuillez remplir tous les champs.' });
+        }
+
+        const utilisateur = await User.findOne({ nom: nom.trim() });
+
+        if (!utilisateur || utilisateur.mot_de_passe !== motDePasse) {
+            return res.status(401).json({ message: 'Nom ou mot de passe incorrect.' });
+        }
+
+        req.session.utilisateur = { nom: utilisateur.nom, role: utilisateur.role };
+        res.json({ nom: utilisateur.nom, role: utilisateur.role });
+
+    } catch (err) {
+        console.error('Erreur de connexion :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+// Infos de l'enseignant connecté (pour afficher son nom)
+app.get('/api/enseignant', (req, res) => {
+    if (!req.session.utilisateur || req.session.utilisateur.role !== 'enseignant') {
+        return res.status(401).json({ message: 'Vous devez vous connecter.' });
+    }
+    res.json(req.session.utilisateur);
+});
+
+// Déconnexion
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.json({ message: 'Déconnexion réussie.' });
+    });
+});
+
+
+
 // Connexion MongoDB et démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
