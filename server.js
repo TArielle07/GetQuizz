@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 });
 
 // Connexion d'un utilisateur
-app.post('/api/login', async (req, res) => {
+app.post('/api/connexion', async (req, res) => {
     try {
         const { nom, motDePasse } = req.body;
 
@@ -110,7 +110,7 @@ function verifierEnseignant(req, res, next) {
 }
 
 // Exemple de route protégée pour les enseignants
-app.get('/api/enseignant', verifierConnexion, verifierEnseignant, (req, res) => {
+app.get('/api/moi', verifierConnexion, verifierEnseignant, (req, res) => {
     res.json({
         nom: req.session.utilisateur.nom,
         role: req.session.utilisateur.role
