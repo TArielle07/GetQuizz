@@ -37,7 +37,7 @@ if (elFormConnexion) {
 
         if (ok) {
             try {
-                let reponse = await fetch(API_URL + "/connexion", {
+                let reponse = await fetch(API_URL + "/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -100,7 +100,7 @@ let elNomUtilisateur = document.querySelector("#nomUtilisateur");
 
 // Afficher le nom de la personne connectée
 if (elNomUtilisateur) {
-    fetch(API_URL + "/moi")
+    fetch(API_URL + "/enseignant")
         .then(reponse => reponse.json())
         .then(utilisateur => {
             if (utilisateur.nom) {
@@ -108,6 +108,18 @@ if (elNomUtilisateur) {
             }
         });
 }
+
+// Déconnexion : fermer la session avant de quitter la page
+let elBtnDeconnexion = document.querySelector(".btn-deconnexion");
+
+if (elBtnDeconnexion) {
+    elBtnDeconnexion.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await fetch(API_URL + "/logout", { method: "POST" });
+        window.location.href = "connexion.html";
+    });
+}
+
 
 // TODO Sprint 2 : afficher les quiz de l'enseignant
 
