@@ -17,4 +17,17 @@ userSchema.pre('save', async function () {
 
 const User = mongoose.model('User', userSchema, 'users');
 
-module.exports = { User };
+
+//Création de la table des quiz
+const quizSchema = new mongoose.Schema({
+    titre: { type: String, required: true },
+    description: { type: String, default: '' },
+    // Relation : le quiz appartient à un enseignant
+    enseignant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    publie: { type: Boolean, default: false }
+}, { timestamps: true });
+
+const Quiz = mongoose.model('Quiz', quizSchema, 'quiz');
+
+
+module.exports = { User, Quiz };
