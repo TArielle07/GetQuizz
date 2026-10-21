@@ -40,4 +40,36 @@ const questionSchema = new mongoose.Schema({
 
 const Question = mongoose.model('Question', questionSchema, 'questions');
 
-module.exports = { User, Quiz, Question };
+//Tables des réponses 
+const reponseSchema = new mongoose.Schema({
+    // Relation : la réponse appartient à une question
+    question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
+    texte: { type: String, required: true },
+    estBonne: { type: Boolean, default: false }
+});
+
+const Reponse = mongoose.model('Reponse', reponseSchema, 'reponses');
+
+//Regles des reponses: QCM 2 a 5 reponses, V/F
+//Une seuke bonne reponses dans les deux cas
+//Message d'erreur ou null si tout est correct
+function verifierReponses(type, reponses) {
+    const nbBonnes = reponses.filter(r => r.estBonne).length;
+
+    if (type === 'qcm') {
+        if (reponses.length < 2) return 'Un QCM doit avoir au moins 2 réponses.';
+        if (reponses.length > 5) return 'Un QCM peut avoir au maximum 5 réponses.';
+    }
+
+    if (type === 'vrai_faux') {
+        const textes = reponses.map(r => r.texte).sort().join(',');
+        if (reponses.length !== 2 || textes !== 'Faux,Vrai') {
+            return 'Une question Vrai/Faux doit avoir exactement les réponses Vrai et Faux.';
+        }
+    }
+
+    if (nbBonnes !== 1) return 'Il faut sélectionner exactement une bonne réponse.';
+
+    return null;
+}
+module.exports = { User, Quiz, Question, Reponse, verifierReponses };
