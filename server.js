@@ -3,6 +3,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const bcrypt = require('bcryptjs');
+const { User } = require('./models');
 require('dotenv').config();
 
 const app = express();
@@ -27,7 +29,7 @@ app.use(session({
 }));
 
 // Modèle des utilisateurs
-const User = mongoose.model('User', new mongoose.Schema({
+/*const User = mongoose.model('User', new mongoose.Schema({
     nom: { type: String, required: true, unique: true },
     mot_de_passe: { type: String, required: true },
     role: {
@@ -35,7 +37,7 @@ const User = mongoose.model('User', new mongoose.Schema({
         enum: ['enseignant', 'etudiant'],
         required: true
     }
-}));
+}));*/
 
 // Route principale
 app.get('/', (req, res) => {
@@ -60,7 +62,7 @@ app.post('/api/connexion', async (req, res) => {
         });
 
         // Vérifier le nom et le mot de passe
-        if (!utilisateur || utilisateur.mot_de_passe !== motDePasse) {
+        if (!utilisateur || !(await bcrypt.compare(motDePasse, utilisateur.mot_de_passe))) {
             return res.status(401).json({
                 message: 'Nom ou mot de passe incorrect.'
             });
@@ -146,11 +148,11 @@ app.post('/api/login', async (req, res) => {
 
         const utilisateur = await User.findOne({ nom: nom.trim() });
 
-        if (!utilisateur || utilisateur.mot_de_passe !== motDePasse) {
+        if (!utilisateur || !(await bcrypt.compare(motDePasse, utilisateur.mot_de_passe))) {
             return res.status(401).json({ message: 'Nom ou mot de passe incorrect.' });
         }
 
-        req.session.utilisateur = { nom: utilisateur.nom, role: utilisateur.role };
+        req.session.utilisateur = { id: utilisateur._id, nom: utilisateur.nom, role: utilisateur.role };
         res.json({ nom: utilisateur.nom, role: utilisateur.role });
 
     } catch (err) {
