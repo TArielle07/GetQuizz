@@ -29,5 +29,15 @@ const quizSchema = new mongoose.Schema({
 
 const Quiz = mongoose.model('Quiz', quizSchema, 'quiz');
 
+//Table des questions
+const questionSchema = new mongoose.Schema({
+    // Relation : la question appartient à un quiz
+    quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
+    texte: { type: String, required: true },
+    // Deux types seulement : QCM ou Vrai/Faux
+    type: { type: String, enum: ['qcm', 'vrai_faux'], required: true }
+}, { timestamps: true });
 
-module.exports = { User, Quiz };
+const Question = mongoose.model('Question', questionSchema, 'questions');
+
+module.exports = { User, Quiz, Question };
