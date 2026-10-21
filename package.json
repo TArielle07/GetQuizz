@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/TArielle07/GetQuizz#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^18.0.6",
     "express": "^5.3.0",
     "express-session": "^1.19.0",
