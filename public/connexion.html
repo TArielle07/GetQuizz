@@ -8,6 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <!--CSS-->
     <link rel="stylesheet" href="css/style_connexion.css">
+    <link rel="stylesheet" href="https://cdnjs.
+cloudflare.com/ajax/libs/font-awesome/6.1.1/css/
+all.min.css">
 </head>
 <body>
   <main class="panneau">
@@ -21,9 +24,12 @@
   </div>
   <div class="field">
     <label for="password">Mot de passe</label>
+     <div class="input-wrapper">
     <input id="password" name="password" type="password"
            placeholder="Entrez votre mot de passe"
            autocomplete="current-password" required>
+    <i class="fa-solid fa-eye" style="font-size:24px;"></i>       
+     </div>
   </div>
   <p id="messageErreur" class="field-error"></p>
   <button class="signup" type="submit">Se connecter</button>
