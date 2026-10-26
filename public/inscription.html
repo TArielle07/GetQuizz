@@ -27,7 +27,8 @@ all.min.css">
         <label for="password">Mot de passe <span class="required">*</span></label>
         <div class="input-wrapper">
         <input id="password" name="password" type="password" placeholder="Entrez votre mot de passe" autocomplete="new-password" minlength="8" required>
-        <i class="fa-solid fa-eye" style="font-size:24px;"></i>
+       <!-- On commence avec l'œil fermé (fa-eye-slash) -->
+        <i class="fa-solid fa-eye-slash eye-icon" onclick="togglePassword('password', this)"></i>
         </div>
         <div class="field-error" data-js-error></div>
       </div>
@@ -36,7 +37,8 @@ all.min.css">
         <label for="confirm">Confirmer le mot de passe <span class="required">*</span></label>
         <div class="input-wrapper">
         <input id="confirm" name="confirm" type="password" placeholder="Entrez à nouveau votre mot de passe" autocomplete="new-password" minlength="8" required>
-        <i class="fa-solid fa-eye" style="font-size:24px;"></i>
+        <!-- On commence avec l'œil fermé (fa-eye-slash) -->
+        <i class="fa-solid fa-eye-slash eye-icon" onclick="togglePassword('password', this)"></i>
         </div>
         <div class="field-error" data-js-error></div>
       </div>
