@@ -79,6 +79,55 @@ input::placeholder {
     color: #757575;
     opacity: 1;
 }
+/* Le conteneur devient l'unique bloc visuel (fond blanc et coins arrondis globaux) */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff !important;
+    border: 2px solid #e2e8f0; /* Bordure grise claire par défaut */
+    border-radius: 14px;      /* Arrondi global de tout le bloc */
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;         /* Empêche l'œil ou le texte de dépasser des bords arrondis */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Au clic, la bordure rose s'applique à TOUT le bloc d'un seul coup (champ + œil) */
+.input-wrapper:focus-within {
+    border-color: #ffb6c1 !important; 
+    box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
+}
+
+/* L'input perd ses styles propres pour fusionner parfaitement avec le conteneur */
+.input-wrapper input {
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 14px 45px 14px 15px !important; /* Laisse l'espace à droite pour l'œil */
+    font-size: 15px;
+    color: #4a5568;
+    font-weight: 500; /* Ajustez si vous préférez du 700 */
+}
+
+/* L'œil se positionne élégamment à l'intérieur, sur la droite du bloc blanc */
+.input-wrapper .eye-icon {
+    position: absolute;
+    right: 15px;
+    font-size: 16px;
+    color: #718096;
+    cursor: pointer;
+    user-select: none;
+    z-index: 2;
+}
+
+.input-wrapper .eye-icon:hover {
+    color: #2d3748;
+}
 
 /* Contour visible quand on navigue au clavier */
 input:focus-visible,
