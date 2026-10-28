@@ -1,0 +1,502 @@
+/* ==========================================================
+   GetQuiz : page "Créer un quiz" (dashboard enseignant)
+   ========================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+/* Les éléments avec l'attribut "hidden" restent cachés,
+   même si on leur a donné un display (flex, grid...) */
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7fbfb;
+    color: #35484B;
+    font-family: "Quicksand", sans-serif;
+}
+
+/* Les champs et boutons reprennent la police de la page */
+input,
+select,
+button {
+    font-family: inherit;
+}
+
+/* ---------- Grille de la page : header / main / footer ---------- */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr 70px;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    height: 100vh;
+}
+
+/* ==========================================================
+   HEADER : profil à gauche, logo au centre, déconnexion à droite
+   ========================================================== */
+.header {
+    grid-area: header;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;   /* profil | logo | déconnexion */
+    align-items: center;
+    gap: 24px;
+    padding: 28px 48px 40px;
+    background-color: #9EE2DB;
+    /* léger éclat en haut + motif de petits points */
+    background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 60%),
+        radial-gradient(circle, rgba(255, 255, 255, 0.55) 2px, transparent 2.5px);
+    background-size: auto, 22px 22px;
+}
+
+/* Grands cercles décoratifs en arrière-plan */
+.header::before,
+.header::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.header::before {
+    width: 190px;
+    height: 190px;
+    left: -60px;
+    top: -90px;
+    background-color: rgba(248, 185, 202, 0.6);
+}
+
+.header::after {
+    width: 240px;
+    height: 240px;
+    right: -80px;
+    bottom: -130px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Le contenu passe devant les cercles */
+.profil,
+.header-logo,
+.btn-deconnexion {
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo : très gros et centré, avec des étoiles autour */
+.header-logo {
+    justify-self: center;
+}
+
+.header-logo img {
+    display: block;
+    height: 130px;
+    width: auto;
+}
+
+.header-logo::before,
+.header-logo::after {
+    content: "";
+    position: absolute;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12,2 15,9 22,9.5 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9.5 9,9' fill='white' stroke='%2335484b' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    pointer-events: none;
+}
+
+.header-logo::before {
+    width: 30px;
+    height: 30px;
+    left: -44px;
+    top: 4px;
+}
+
+.header-logo::after {
+    width: 22px;
+    height: 22px;
+    right: -40px;
+    bottom: 10px;
+}
+
+/* Profil à gauche : pastille "sticker" avec ombre dure */
+.profil {
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 24px 6px 6px;
+    background-color: #ffffff;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 #35484b;
+}
+
+.profil-cercle {
+    width: 48px;
+    height: 48px;
+    background-color: #F8B9CA;
+    border: 2px solid #35484B;
+    border-radius: 50%;
+}
+
+.nom-utilisateur {
+    font-size: medium;
+    font-weight: 700;
+}
+
+/* Déconnexion à droite : même style sticker, en rose */
+.btn-deconnexion {
+    justify-self: end;
+    padding: 12px 26px;
+    background-color: #F8B9CA;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #35484B;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 #35484b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-deconnexion:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #35484b;
+}
+
+.btn-deconnexion:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #35484b;
+}
+
+/* ==========================================================
+   MAIN : espace autour de tout le contenu
+   ========================================================== */
+.main-container {
+    grid-area: main;
+    background-color: #f7fbfb;
+    padding: 32px;
+    overflow-y: auto;
+}
+
+/* Le formulaire ne s'étire pas trop sur les grands écrans */
+.formulaire {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ---------- Section 1 : titre et boutons ---------- */
+.section-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 0 20px;
+}
+
+.section-1 h2 {
+    margin: 0 auto 0 0;
+    color: #35484B;
+}
+
+.section-1 button {
+    padding: 12px 16px;
+    font-weight: 700;
+    color: #35484B;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.section-1 button[value="brouillon"] {
+    background-color: #9EE2DB;
+}
+
+.section-1 button[value="publier"] {
+    background-color: #F8B9CA;
+}
+
+.section-1 button:hover {
+    filter: brightness(0.95);
+}
+
+/* ==========================================================
+   CARTES : informations du quiz (turquoise) et questions (rose)
+   ========================================================== */
+.section-2,
+.section-2-question {
+    padding: 16px;
+    margin: 0 0 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-weight: 700;
+}
+
+.section-2 {
+    background-color: #d2f4f0;
+}
+
+.section-2-question {
+    background-color: #F8B9CA;
+}
+
+/* Un label + son champ */
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.champ label,
+.label-reponses {
+    margin: 0;
+    font-size: 13px;
+}
+
+/* Thème et Difficulté côte à côte */
+.ligne-2-champs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Champs blancs, sans bordure (texte et menus déroulants) */
+.section-2 input,
+.section-2 select,
+.section-2-question input[type="text"],
+.section-2-question select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: inherit;
+    color: #35484B;
+}
+
+/* Placeholders grisés */
+.section-2 input::placeholder,
+.section-2-question input::placeholder {
+    color: #757575;
+    opacity: 1;
+}
+
+/* Menu déroulant : gris tant que rien n'est choisi */
+.section-2 select:required:invalid,
+.section-2-question select:required:invalid {
+    color: #757575;
+}
+
+.section-2 select option,
+.section-2-question select option {
+    color: #35484B;
+}
+
+/* ---------- Question : en-tête ---------- */
+.cote-questionnaire {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cote-questionnaire h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.btn-supprimer {
+    padding: 8px 12px;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #35484B;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-supprimer:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-supprimer:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ---------- Choix multiples : 4 réponses en 2 colonnes ---------- */
+.reponses-grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+}
+
+.reponse {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.reponse input[type="text"] {
+    flex: 1;
+    width: auto;
+}
+
+/* Boutons radio : cercle blanc, centre turquoise quand coché */
+.section-2-question input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    background-color: #ffffff;
+    border: 2px solid #cfcfcf;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.section-2-question input[type="radio"]:checked {
+    border-color: #35484B;
+    background-color: #9EE2DB;
+    box-shadow: inset 0 0 0 4px #ffffff;
+}
+
+/* ---------- Type de question : affichage des réponses sans JavaScript ---------- */
+/* Par défaut : choix multiples */
+.bloc-vf {
+    display: none;
+}
+
+/* Si "Vrai / Faux" est choisi dans le menu : on inverse les deux blocs */
+.section-2-question:has(.select-type option[value="vf"]:checked) .bloc-choix {
+    display: none;
+}
+
+.section-2-question:has(.select-type option[value="vf"]:checked) .bloc-vf {
+    display: flex;
+}
+
+/* ---------- Vrai / Faux ---------- */
+.vf-options {
+    display: flex;
+    gap: 24px;
+}
+
+.vf-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* ---------- Bouton "+ Ajouter une question" ---------- */
+.btn-ajouter {
+    padding: 12px 20px;
+    background-color: #9EE2DB;
+    border: 0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #35484B;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.btn-ajouter:hover {
+    filter: brightness(0.95);
+}
+
+.btn-ajouter:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: none;
+}
+
+/* ---------- Contour visible quand on navigue au clavier ---------- */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #35484B;
+    outline-offset: 2px;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer {
+    grid-area: footer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 32px;
+    background-color: #dafbf7;
+    font-size: 13px;
+}
+
+.footer-copy {
+    margin: 0;
+}
+
+/* ==========================================================
+   PETITS ÉCRANS
+   ========================================================== */
+@media (max-width: 900px) {
+    /* Le logo passe sur sa propre ligne, profil et déconnexion en dessous */
+    .header {
+        grid-template-columns: 1fr 1fr;
+        padding: 20px 24px 32px;
+    }
+
+    .header-logo {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .header-logo img {
+        height: 100px;
+    }
+
+    .header-logo::before,
+    .header-logo::after {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .ligne-2-champs,
+    .reponses-grille {
+        grid-template-columns: 1fr;
+    }
+
+    .section-1 {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-deconnexion,
+    .section-1 button,
+    .btn-supprimer,
+    .btn-ajouter {
+        transition: none;
+    }
+}

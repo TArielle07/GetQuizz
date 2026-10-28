@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un quiz</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style-creer.css">
+</head>
+<body>
+    <div class="grid-container">
+
+        <!--Header en haut-->
+        <header class="header">
+            <!--Profil à gauche : le nom change selon la personne connectée-->
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur" id="nomUtilisateur"></span>
+            </div>
+
+            <!--Logo au centre (retour au tableau de bord)-->
+            <a href="enseignant.html" class="header-logo">
+                <img src="GetQuiz_logo_lettres" alt="GetQuiz">
+            </a>
+
+            <!--Déconnexion à droite-->
+            <a href="/api/deconnexion" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+        <!--Main-->
+        <main class="main-container">
+            <form id="form-quiz" class="formulaire">
+
+                <!--Section 1 : titre de la page et boutons-->
+                <div class="section-1">
+                    <h2>Créer un quiz</h2>
+                    <button type="submit" name="action" value="brouillon" formnovalidate>Enregistrer un brouillon</button>
+                    <button type="submit" name="action" value="publier">Publier</button>
+                </div>
+
+                <!--Section 2 : informations du quiz-->
+                <div class="section-2">
+                    <div class="champ">
+                        <label for="titre-quiz">Titre du quiz</label>
+                        <input type="text" id="titre-quiz" name="titre-quiz" placeholder="[Titre du quiz]" required>
+                    </div>
+
+                    <div class="ligne-2-champs">
+                        <div class="champ">
+                            <label for="theme-quiz">Thème</label>
+                            <input type="text" id="theme-quiz" name="theme-quiz" placeholder="[Thème du quiz]" required>
+                        </div>
+
+                        <div class="champ">
+                            <label for="barre-echelle">Difficulté du quiz</label>
+                            <select id="barre-echelle" name="barre-echelle" required>
+                                <option value="" selected disabled>[Choisir la difficulté du quiz]</option>
+                                <option value="facile">Facile</option>
+                                <option value="moyen">Moyen</option>
+                                <option value="difficile">Difficile</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Question 1-->
+                <div class="section-2-question">
+
+                    <div class="cote-questionnaire">
+                        <h3 id="q1-titre">Question 1</h3>
+                        <button type="button" class="btn-supprimer">Supprimer</button>
+                    </div>
+
+                    <!--Menu déroulant : type de question-->
+                    <div class="champ">
+                        <label for="q1-type">Type de question</label>
+                        <select id="q1-type" name="q1-type" class="select-type">
+                            <option value="choix" selected>Choix multiples</option>
+                            <option value="vf">Vrai / Faux</option>
+                        </select>
+                    </div>
+
+                    <div class="champ">
+                        <label for="q1-texte">Intitulé de la question</label>
+                        <input type="text" id="q1-texte" name="q1-texte" placeholder="[Votre question]" required>
+                    </div>
+
+                    <!--Réponses : choix multiples-->
+                    <div class="champ bloc-choix">
+                        <label for="q1-reponse-a">Réponses (cochez la bonne réponse)</label>
+                        <div class="reponses-grille">
+                            <div class="reponse">
+                                <input type="radio" name="q1-bonne" value="a" aria-label="Bonne réponse A">
+                                <input type="text" id="q1-reponse-a" name="q1-reponse-a" placeholder="[Réponse 1]">
+                            </div>
+
+                            <div class="reponse">
+                                <input type="radio" name="q1-bonne" value="b" aria-label="Bonne réponse B">
+                                <input type="text" name="q1-reponse-b" placeholder="[Réponse 2]">
+                            </div>
+
+                            <div class="reponse">
+                                <input type="radio" name="q1-bonne" value="c" aria-label="Bonne réponse C">
+                                <input type="text" name="q1-reponse-c" placeholder="[Réponse 3]">
+                            </div>
+
+                            <div class="reponse">
+                                <input type="radio" name="q1-bonne" value="d" aria-label="Bonne réponse D">
+                                <input type="text" name="q1-reponse-d" placeholder="[Réponse 4]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Réponses : vrai / faux (le CSS l'affiche seulement si "Vrai / Faux" est choisi)-->
+                    <div class="champ bloc-vf">
+                        <p class="label-reponses">Bonne réponse</p>
+                        <div class="vf-options">
+                            <label class="vf-option">
+                                <input type="radio" name="q1-bonne-vf" value="vrai"> Vrai
+                            </label>
+                            <label class="vf-option">
+                                <input type="radio" name="q1-bonne-vf" value="faux"> Faux
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+                <!--End question 1-->
+
+                <button type="button" id="btn-ajouter-question" class="btn-ajouter">+ Ajouter une question</button>
+            </form>
+        </main>
+        <!--End main-->
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
