@@ -120,6 +120,34 @@ if (elBtnDeconnexion) {
     });
 }
 
+// Afficher / cacher le mot de passe (icône de l'œil)
+function togglePassword(idChamp, icone) {
+    let elChamp = document.getElementById(idChamp);
+
+    if (elChamp.type === "password") {
+        elChamp.type = "text";
+        icone.classList.replace("fa-eye-slash", "fa-eye");
+    } else {
+        elChamp.type = "password";
+        icone.classList.replace("fa-eye", "fa-eye-slash");
+    }
+}
+
+
+
+// Afficher / cacher le mot de passe (icône de l'œil)
+function togglePassword(idChamp, icone) {
+    let elChamp = document.getElementById(idChamp);
+
+    if (elChamp.type === "password") {
+        elChamp.type = "text";
+        icone.classList.replace("fa-eye-slash", "fa-eye");
+    } else {
+        elChamp.type = "password";
+        icone.classList.replace("fa-eye", "fa-eye-slash");
+    }
+}
+
 
 // TODO Sprint 2 : afficher les quiz de l'enseignant
 
