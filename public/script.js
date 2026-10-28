@@ -99,11 +99,18 @@ if (elBtnDeconnexion) {
 let elNomUtilisateur = document.querySelector("#nomUtilisateur");
 
 // Afficher le nom de la personne connectée
+
 if (elNomUtilisateur) {
     fetch(API_URL + "/enseignant")
-        .then(reponse => reponse.json())
+        .then(reponse => {
+            if (!reponse.ok) {
+                window.location.href = "connexion.html";
+                return;
+            }
+            return reponse.json();
+        })
         .then(utilisateur => {
-            if (utilisateur.nom) {
+            if (utilisateur && utilisateur.nom) {
                 elNomUtilisateur.textContent = utilisateur.nom;
             }
         });
@@ -135,18 +142,6 @@ function togglePassword(idChamp, icone) {
 
 
 
-// Afficher / cacher le mot de passe (icône de l'œil)
-function togglePassword(idChamp, icone) {
-    let elChamp = document.getElementById(idChamp);
-
-    if (elChamp.type === "password") {
-        elChamp.type = "text";
-        icone.classList.replace("fa-eye-slash", "fa-eye");
-    } else {
-        elChamp.type = "password";
-        icone.classList.replace("fa-eye", "fa-eye-slash");
-    }
-}
 
 
 // TODO Sprint 2 : afficher les quiz de l'enseignant
