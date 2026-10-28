@@ -1,321 +1,258 @@
-/*--Dashboard de l'enseignant --*/
-/*-- les comments --*/
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #f7fbfb;
-    color : #35484B; 
-    font-family: "Quicksand", sans-serif;
-
-}
-.grid-container {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    grid-template-rows: 1fr 70px;
-    grid-template-areas:
-        "sidebar main"
-        "sidebar footer";
-    height: 100vh;
-}
-
-                                                         /*-----------------Sidebar------------------*/
-#sidebar {
-    grid-area: sidebar;
-    background-color:#9EE2DB;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 20px;
-
-}
-/*logo*/
-#sidebar img {
-    display: block; 
-    width: 70%;
-    max-width: 180px;
-    height: auto;
-    margin: 15px auto;
-}
-/*coté profil*/
-.profil-cercle {
-    width: 45px; 
-    height: 45px; 
-    background-color: #F8B9CA; 
-    border-radius: 50%;
-}
-.nom-utilisateur {
-    font-size: 25px;
-    font-weight: 700;
-}
-.profil {
-    display: flex;
-    align-items: center;
-    gap: 10px; 
-    padding: 10px 20px;
-    font-size: medium;
-}
-/*les listes*/
-.sidebar-list {
-    list-style: none;
-    margin: 0;
-    padding: 0 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-}
-.sidebar-item {
-    padding: 12px 20px;
-    font-size: 20px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-.sidebar-item:hover {
-    background-color: #f7fbfb;
-    transform: translateX(4px);
-
-}
-
-.sidebar-item.active {
-    background-color: #ffffff;
-    transform: none;
-}
-
-/*Bouton deconnexion*/
-.btn-deconnexion {
-    display: block;                 
-    margin: auto 12px 0;           
-    padding: 12px 20px;             
-    font-size: 20px;
-    font-weight: 500;
-    color: #35484B;
-    text-decoration: none;          /* enlève le soulignement */
-    border-radius: 6px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.btn-deconnexion:hover {
-    background-color: #f7fbfb;
-    transform: translateX(4px);     /* même animation que le menu */
-}
-
-
-                                         /*-------------Partie de la page création de quiz------------------*/
-.main-container {
-    grid-area: main;
-    background-color: #f7fbfb;
-    padding: 32px; 
-    overflow-y: auto;
-
-}
-
-/*-- Section 1 de main-container --*/
-.section-1 {
-     padding: 24px 32px;
-     display: flex;
-     gap: 12px;
-     align-items: center;
-     justify-content: space-between;
-     padding: 0 0 20px; 
-}
-
-.section-1 h2 {
-    color: #35484B;
-    margin-right: auto;
-}
-
-.section-1 button {
-    padding: 12px 12px;
-    font-family: "Quicksand", sans-serif;
-    font-weight: 700;
-    color: #35484B;
-    border: 0;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: filter 0.2s ease;
-}
-/*-- Appeler les buttons selon les values -> changer de couleur --*/
-.section-1 button[value="brouillon"] {
-    background-color: #9EE2DB;
-}
-.section-1 button[value="publier"] {
-    background-color: #F8B9CA;
-}
-/*-- Animation sur les buttons --*/
-.section-1 button:hover {
-    filter: brightness(0.95);
-}
-
-/*-- SECTION 2 --*/
 * {
     box-sizing: border-box;
 }
-.section-2 {
-    background-color: #d2f4f0;
-    border-radius: 10px;
-    padding: 16px;
-    margin: 0 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    font-family: "Quicksand", sans-serif;
-    font-weight: 700;
-}
 
-.champ {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-.champ label {
-    font-size: 13px;
-}
-.ligne-2-champs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-.section-2 input,
-.section-2 select {
-    width: 100%;
-    height: 44px;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 10px;
-    background-color: #ffffff;
-    font-family: inherit;
-    font-weight: inherit;
-    font-size: 14px;
-    color: #35484B;
-}
-
-/*SECTION 2 QUESTIONS*/
-.section-2-question {
-    background-color: #F8B9CA;
-    border-radius: 10px;
-    padding: 16px;
-    margin: 0 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    font-family: "Quicksand", sans-serif;
-    font-weight: 700;
-}
-
-.cote-questionnaire {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-
-.cote-questionnaire h3 {
+body {
     margin: 0;
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.btn-supprimer {
-    padding: 8px 12px;
-    background: transparent;
-    border: 0;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
+    background-color: #f7fbfb;
     color: #35484B;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-supprimer:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Les 4 réponses en 2 colonnes */
-.reponses-grille {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 16px;      /* 10px entre les lignes, 16px entre les colonnes */
-}
-
-.reponse {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Tous les champs texte de la carte : blancs, sans bordure */
-.section-2-question input[type="text"] {
-    width: 100%;
-    height: 44px;
-    padding: 0 12px;
-    background-color: #ffffff;
-    border: 0;
-    border-radius: 10px;
-    font-family: inherit;
     font-family: "Quicksand", sans-serif;
-    font-weight: 700;
-}
-.section-2-question input,
-.section-2-question button,
-.section-2-question label {
-    font-family: inherit;
-    font-weight: inherit;
 }
 
-.reponse input[type="text"] {
-    flex: 1;
+/* Page : header en haut, contenu au milieu, footer en bas */
+.page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr 70px;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;   /* profil | logo | déconnexion */
+    align-items: center;
+    gap: 24px;
+    padding: 28px 48px 40px;
+    background-color: #9EE2DB;
+    /* léger éclat en haut + motif de petits points */
+    background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 60%),
+        radial-gradient(circle, rgba(255, 255, 255, 0.55) 2px, transparent 2.5px);
+    background-size: auto, 22px 22px;
+}
+
+/* Grands cercles décoratifs en arrière-plan */
+.header::before,
+.header::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.header::before {
+    width: 190px;
+    height: 190px;
+    left: -60px;
+    top: -90px;
+    background-color: rgba(248, 185, 202, 0.6);
+}
+
+.header::after {
+    width: 240px;
+    height: 240px;
+    right: -80px;
+    bottom: -130px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Le contenu passe devant les cercles */
+.profil,
+.header-logo,
+.btn-deconnexion {
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo : très gros et centré, avec des étoiles autour */
+.header-logo {
+    justify-self: center;
+}
+
+.header-logo img {
+    display: block;
+    height: 130px;
     width: auto;
 }
 
-/* Les boutons radio : cercle blanc */
-.reponse input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    flex-shrink: 0;
+.header-logo::before,
+.header-logo::after {
+    content: "";
+    position: absolute;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12,2 15,9 22,9.5 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9.5 9,9' fill='white' stroke='%2335484b' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    pointer-events: none;
+}
+
+.header-logo::before {
+    width: 30px;
+    height: 30px;
+    left: -44px;
+    top: 4px;
+}
+
+.header-logo::after {
     width: 22px;
     height: 22px;
-    margin: 0;
+    right: -40px;
+    bottom: 10px;
+}
+
+/* Profil à gauche : pastille "sticker" avec ombre dure */
+.profil {
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 24px 6px 6px;
     background-color: #ffffff;
-    border: 2px solid #cfcfcf;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 #35484b;
+}
+
+.profil-cercle {
+    width: 48px;
+    height: 48px;
+    background-color: #F8B9CA;
+    border: 2px solid #35484B;
     border-radius: 50%;
-    cursor: pointer;
 }
 
-.reponse input[type="radio"]:checked {
-    border-color: #35484B;
-    background-color: #9EE2DB;
-    box-shadow: inset 0 0 0 4px #ffffff;   /* petit cercle turquoise au centre */
+.nom-utilisateur {
+    font-size: medium;
+    font-weight: 700;
 }
 
-.btn-ajouter {
-    margin: 0;
-    padding: 12px 20px;
-    background-color: #9EE2DB;
-    border: 0;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
+/* Déconnexion à droite : même style sticker, en rose */
+.btn-deconnexion {
+    justify-self: end;
+    padding: 12px 26px;
+    background-color: #F8B9CA;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
     color: #35484B;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 #35484b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-deconnexion:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #35484b;
+}
+
+.btn-deconnexion:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #35484b;
+}
+
+a:focus-visible {
+    outline: 3px solid #35484B;
+    outline-offset: 3px;
+}
+
+/* ---------- CONTENU ---------- */
+.main-container {
+    padding: 40px 48px 56px;
+}
+
+.titre-page {
+    margin: 0 0 48px;
+    max-width: 22ch;          /* la phrase passe sur 2 lignes, comme une accroche */
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+/* Mot mis en valeur : trait rose façon surligneur */
+.mot-accent {
+    background: linear-gradient(transparent 62%, #F8B9CA 62%);
+}
+
+.titre-page .nom-utilisateur {
+    font-size: inherit;
+}
+
+/* 4 cartes : elles passent à 2 puis 1 par ligne si l'écran est étroit */
+.cartes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 40px;              /* de la place pour le relief de chaque carte */
+}
+
+/* ---------- CARTES 3D CLIQUABLES (même relief que le logo) ---------- */
+.carte {
+    min-height: 180px;
+    padding: 28px 24px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;     /* c'est un lien : on enlève le soulignement */
     cursor: pointer;
-    transition: filter 0.2s ease;
+    box-shadow:
+        2px 2px 0 #9ee2db,
+        4px 4px 0 #7fcfc7,
+        6px 6px 0 #5fb8af,
+        8px 8px 0 #43a097,
+        10px 10px 0 #35484b;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-ajouter:hover {
-    filter: brightness(0.95);
+/* Survol : la carte se soulève */
+.carte:hover {
+    transform: translate(-3px, -3px);
+    box-shadow:
+        3px 3px 0 #9ee2db,
+        6px 6px 0 #7fcfc7,
+        9px 9px 0 #5fb8af,
+        12px 12px 0 #43a097,
+        15px 15px 0 #35484b;
 }
 
+/* Clic : la carte s'enfonce comme un bouton */
+.carte:active {
+    transform: translate(6px, 6px);
+    box-shadow: 2px 2px 0 #35484b;
+}
+
+.carte:focus-visible {
+    outline: 3px solid #35484B;
+    outline-offset: 6px;
+}
+
+.carte h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.carte-texte {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Couleurs des 4 cartes */
+.carte-turquoise        { background-color: #9EE2DB; }
+.carte-rose             { background-color: #F8B9CA; }
+.carte-rose-clair       { background-color: #fddde6; }
+.carte-turquoise-clair  { background-color: #d2f4f0; }
+
+/* ---------- FOOTER ---------- */
 .footer {
-    grid-area: footer;
-    background-color: #dafbf7;
-    padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    padding: 0 32px;
+    background-color: #dafbf7;
     font-size: 13px;
 }
 
@@ -323,3 +260,36 @@ body {
     margin: 0;
 }
 
+/* ---------- PETITS ÉCRANS ---------- */
+@media (max-width: 900px) {
+    /* Le logo passe sur sa propre ligne, profil et déconnexion en dessous */
+    .header {
+        grid-template-columns: 1fr 1fr;
+        padding: 20px 24px 32px;
+    }
+
+    .header-logo {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .header-logo img {
+        height: 100px;
+    }
+
+    .header-logo::before,
+    .header-logo::after {
+        display: none;
+    }
+
+    .main-container {
+        padding: 32px 24px 48px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-deconnexion,
+    .carte {
+        transition: none;
+    }
+}
