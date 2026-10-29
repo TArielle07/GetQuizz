@@ -518,6 +518,59 @@ if (elFormMotDePasse) {
 
 // TODO : afficher la liste des quiz de l'enseignant (mes-quiz.html)
 
+
+/* =========================================================
+   PAGES MES QUIZ (mes-quiz.html) ET BROUILLONS (brouillons.html)
+   ========================================================= */
+
+let elListeQuizPublies = document.querySelector("#quiz-list");
+let elListeBrouillons = document.querySelector("#draft-list");
+
+if (elListeQuizPublies) {
+    afficherListeQuiz("publie", elListeQuizPublies, document.querySelector("#quiz-empty"));
+}
+if (elListeBrouillons) {
+    afficherListeQuiz("brouillon", elListeBrouillons, document.querySelector("#draft-empty"));
+}
+
+// Demande au serveur les quiz (publiés ou brouillons) et crée une carte par quiz
+async function afficherListeQuiz(statut, elListe, elVide) {
+    try {
+        let reponse = await fetch(API_URL + "/quiz?statut=" + statut);
+        if (!reponse.ok) throw new Error();
+        let listeQuiz = await reponse.json();
+
+        // Aucun quiz : on laisse le message "Aucun ... pour le moment"
+        if (listeQuiz.length === 0) return;
+
+        // Au moins un quiz : on cache le message et on montre la liste
+        elVide.style.display = "none";
+        elListe.hidden = false;
+
+        listeQuiz.forEach(quiz => {
+            let elCarte = document.createElement("article");
+            elCarte.className = "carte " + (statut === "publie" ? "carte-turquoise" : "carte-rose-clair");
+
+            let elTitre = document.createElement("h2");
+            elTitre.textContent = quiz.titre;
+
+            let elDescription = document.createElement("p");
+            elDescription.className = "carte-texte";
+            elDescription.textContent = quiz.description || "Pas de description";
+
+            // Ex. "Maths · facile · 2026-10-29"
+            let elDetails = document.createElement("p");
+            elDetails.className = "carte-texte";
+            let date = new Date(quiz.updatedAt).toLocaleDateString("fr-CA");
+            elDetails.textContent = [quiz.theme, quiz.difficulte, date].filter(Boolean).join(" · ");
+
+            elCarte.append(elTitre, elDescription, elDetails);
+            elListe.appendChild(elCarte);
+        });
+    } catch (error) {
+        console.log("Impossible de charger les quiz :", error);
+    }
+}
 /* =========================================================
    PAGE ÉTUDIANT (etudiant.html) — Front 1
    ========================================================= */
