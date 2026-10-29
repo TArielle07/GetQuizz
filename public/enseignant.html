@@ -16,9 +16,9 @@
 <body>
     <div class="page">
 
-        <!--Header-->
+        <!--Header en haut (remplace la sidebar)-->
         <header class="header">
-            <!--Profil à gauche : le nom change selon la personne connectée-->
+            <!--Profil à gauche-->
             <div class="profil">
                 <div class="profil-cercle"></div>
                 <span class="nom-utilisateur"></span>
@@ -36,7 +36,8 @@
 
         <!--Contenu : 4 cartes 3D-->
         <main class="main-container">
-            <h1 class="titre-page">Bonjour <span class="nom-utilisateur">Invité</span>, prêt à faire un <span class="mot-accent">quiz aujourd’hui</span>&nbsp;!</h1>
+            <h1 class="titre-page">Bonjour<span id="n"><span class="nom-utilisateur"></span>,
+                 prêt à faire un <span class="mot-accent">quiz aujourd’hui</span>&nbsp;!</h1>
 
             <section class="cartes" aria-label="Accès rapide">
                 <a href="creer-quiz.html" class="carte carte-turquoise">
@@ -65,7 +66,6 @@
             <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
         </footer>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
