@@ -82,20 +82,18 @@ function togglePassword(idChamp, icone) {
    (enseignant.html et creer-quiz.html) — Front 2
    ========================================================= */
 
-let elNomUtilisateur = document.querySelector("#nomUtilisateur");
+//let elNomUtilisateur = document.querySelector("#nomUtilisateur");
+let elsNomUtilisateur = document.querySelectorAll(".nom-utilisateur");
 
 // Afficher le nom de la personne connectée
 // Si personne n'est connecté, retour à la page de connexion
 // Afficher le nom de la personne connectée (profil + "Bonjour ...")
-if (elNomUtilisateur) {
+if (elsNomUtilisateur.length > 0) {
     let nom = sessionStorage.getItem("nomUtilisateur");
 
     if (nom) {
-        document.querySelectorAll(".nom-utilisateur").forEach(el => {
-            el.textContent = nom;
-        });
+        elsNomUtilisateur.forEach(el => el.textContent = nom);
     } else {
-        // Personne ne s'est connecté : retour à la page de connexion
         window.location.href = "connexion.html";
     }
 }
