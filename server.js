@@ -284,6 +284,34 @@ app.get('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) => 
 });
 
 
+// Un quiz avec ses questions et leurs réponses (pour terminer un brouillon)
+app.get('/api/quiz/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+        const quiz = await Quiz.findOne({ _id: req.params.id, enseignant: req.session.utilisateur.id });
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+
+        const questions = await Question.find({ quiz: quiz._id }).sort({ createdAt: 1 }).lean();
+        const reponses = await Reponse.find({ question: { $in: questions.map(q => q._id) } }).lean();
+
+        // On range chaque réponse sous sa question
+        const resultat = questions.map(q => ({
+            ...q,
+            reponses: reponses.filter(r => String(r.question) === String(q._id))
+        }));
+
+        res.json({ quiz, questions: resultat });
+    } catch (err) {
+        console.error('Erreur affichage quiz :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+
 // Connexion MongoDB et démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
