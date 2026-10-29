@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes quiz</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mes-quiz.css">
+
+</head>
+<body>
+    <div class="page">
+
+        <!--Header en haut (remplace la sidebar)-->
+        <header class="header">
+            <!--Profil à gauche-->
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur"></span>
+            </div>
+
+            <!--Logo au centre-->
+            <a href="enseignant.html" class="header-logo">
+                <img src="GetQuiz_logo.png" alt="GetQuiz">
+            </a>
+
+            <!--Déconnexion à droite-->
+            <a href="connexion.html" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+       <main>
+    <a class="back-link" href="enseignant.html">← Retour à l’accueil</a>
+ 
+    <h1 class="page-title">
+      Voici tous vos <span class="highlight">quiz publiés</span> !
+    </h1>
+    <p class="subtitle">Retrouvez tous vos quiz publiés au même endroit.</p>
+ 
+    <!-- Liste des quiz : les cartes seront ajoutées ici quand les données existeront -->
+    <section class="grid" id="quiz-list" style="display:none">
+      
+    </section>
+ 
+    <!-- État vide : à masquer quand il y a au moins un quiz -->
+    <section class="empty-state" id="quiz-empty">
+      <div class="empty-icon">📝</div>
+      <h2>Aucun quiz publié pour le moment</h2>
+      <p>Vous n’avez pas encore publié de quiz. Créez-en un, et il apparaîtra ici.</p>
+      <a class="btn mint" href="creer-quiz.html">+ Créer un quiz</a>
+    </section>
+  </main>
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+</body>
+</html>
