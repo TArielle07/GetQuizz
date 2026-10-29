@@ -1,186 +1,202 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un quiz</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer un quiz</title>
+ 
     <!--Police-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+ 
     <!--CSS-->
-    <link rel="stylesheet" href="css/style-creer.css">
+<link rel="stylesheet" href="css/style-creer.css">
 </head>
 <body>
-    <div class="grid-container">
-
+<div class="grid-container">
+ 
         <!--Header en haut-->
-        <header class="header">
-            <!--Profil à gauche : le nom change selon la personne connectée-->
-            <div class="profil">
-                <div class="profil-cercle"></div>
-                <span class="nom-utilisateur" id="nomUtilisateur"></span>
-            </div>
-
+<header class="header">
+<!--Profil à gauche : le nom change selon la personne connectée-->
+<div class="profil">
+<div class="profil-cercle"></div>
+<span class="nom-utilisateur" id="nomUtilisateur"></span>
+</div>
+ 
             <!--Logo au centre (retour au tableau de bord)-->
-            <a href="enseignant.html" class="header-logo">
-                <img src="GetQuiz_logo.png" alt="GetQuiz">
-            </a>
-
+<a href="enseignant.html" class="header-logo">
+<img src="GetQuiz_logo.png" alt="GetQuiz">
+</a>
+ 
             <!--Déconnexion à droite-->
-            <a href="/api/deconnexion" class="btn-deconnexion">Déconnexion</a>
-        </header>
-        <!--End header-->
-
+<a href="/api/deconnexion" class="btn-deconnexion">Déconnexion</a>
+</header>
+<!--End header-->
+ 
         <!--Main-->
-        <main class="main-container">
-            <div class="creer-layout">
-
-            <form id="form-quiz" class="formulaire">
-
-                <!--Section 1 : titre de la page et boutons-->
-                <div class="section-1">
-                    <h2>Créer un quiz</h2>
-                    <button type="submit" name="action" value="brouillon" formnovalidate>Enregistrer un brouillon</button>
-                    <button type="submit" name="action" value="publier">Publier</button>
-                </div>
-
+<main class="main-container">
+<div class="creer-layout">
+ 
+            <!--novalidate : c'est script.js qui valide et affiche les messages d'erreur-->
+<form id="form-quiz" class="formulaire" novalidate>
+ 
+                <!--Section 1 : retour au dashboard et titre de la page-->
+<div class="section-1">
+<a href="enseignant.html" class="btn-retour">← Retour au tableau de bord</a>
+<h2>Créer un quiz</h2>
+</div>
+ 
                 <!--Section 2 : informations du quiz-->
-                <div class="section-2">
+<div class="section-2">
+<div class="champ">
+<label for="titre-quiz">Titre du quiz</label>
+<input type="text" id="titre-quiz" name="titre-quiz" placeholder="[Titre du quiz]" required>
+</div>
+ 
                     <div class="champ">
-                        <label for="titre-quiz">Titre du quiz</label>
-                        <input type="text" id="titre-quiz" name="titre-quiz" placeholder="[Titre du quiz]" required>
-                    </div>
-
+<label for="description-quiz">Description</label>
+<textarea id="description-quiz" name="description-quiz" placeholder="[Description du quiz]" required></textarea>
+</div>
+ 
                     <div class="ligne-2-champs">
+<div class="champ">
+<label for="theme-quiz">Thème</label>
+<input type="text" id="theme-quiz" name="theme-quiz" placeholder="[Thème du quiz]" required>
+</div>
+ 
                         <div class="champ">
-                            <label for="theme-quiz">Thème</label>
-                            <input type="text" id="theme-quiz" name="theme-quiz" placeholder="[Thème du quiz]" required>
-                        </div>
-
-                        <div class="champ">
-                            <label for="barre-echelle">Difficulté du quiz</label>
-                            <select id="barre-echelle" name="barre-echelle" required>
-                                <option value="" selected disabled>[Choisir la difficulté du quiz]</option>
-                                <option value="facile">Facile</option>
-                                <option value="moyen">Moyen</option>
-                                <option value="difficile">Difficile</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Question 1-->
-                <div class="section-2-question">
-
-                    <div class="cote-questionnaire">
-                        <h3 id="q1-titre">Question 1</h3>
-                        <button type="button" class="btn-supprimer">Supprimer</button>
-                    </div>
-
-                    <!--Menu déroulant : type de question-->
-                    <div class="champ">
-                        <label for="q1-type">Type de question</label>
-                        <select id="q1-type" name="q1-type" class="select-type">
-                            <option value="choix" selected>Choix multiples</option>
-                            <option value="vf">Vrai / Faux</option>
-                        </select>
-                    </div>
-
-                    <div class="champ">
-                        <label for="q1-texte">Intitulé de la question</label>
-                        <input type="text" id="q1-texte" name="q1-texte" placeholder="[Votre question]" required>
-                    </div>
-
-                    <!--Réponses : choix multiples-->
-                    <div class="champ bloc-choix">
-                        <label for="q1-reponse-a">Réponses (cochez la bonne réponse)</label>
-                        <div class="reponses-grille">
-                            <div class="reponse">
-                                <input type="radio" name="q1-bonne" value="a" aria-label="Bonne réponse A">
-                                <input type="text" id="q1-reponse-a" name="q1-reponse-a" placeholder="[Réponse 1]">
-                            </div>
-
-                            <div class="reponse">
-                                <input type="radio" name="q1-bonne" value="b" aria-label="Bonne réponse B">
-                                <input type="text" name="q1-reponse-b" placeholder="[Réponse 2]">
-                            </div>
-
-                            <div class="reponse">
-                                <input type="radio" name="q1-bonne" value="c" aria-label="Bonne réponse C">
-                                <input type="text" name="q1-reponse-c" placeholder="[Réponse 3]">
-                            </div>
-
-                            <div class="reponse">
-                                <input type="radio" name="q1-bonne" value="d" aria-label="Bonne réponse D">
-                                <input type="text" name="q1-reponse-d" placeholder="[Réponse 4]">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--Réponses : vrai / faux (le CSS l'affiche seulement si "Vrai / Faux" est choisi)-->
-                    <div class="champ bloc-vf">
-                        <p class="label-reponses">Bonne réponse</p>
-                        <div class="vf-options">
-                            <label class="vf-option">
-                                <input type="radio" name="q1-bonne-vf" value="vrai"> Vrai
-                            </label>
-                            <label class="vf-option">
-                                <input type="radio" name="q1-bonne-vf" value="faux"> Faux
-                            </label>
-                        </div>
-                    </div>
-
-                </div>
-                <!--End question 1-->
-
+<label for="barre-echelle">Difficulté du quiz</label>
+<select id="barre-echelle" name="barre-echelle" required>
+<option value="" selected disabled>[Choisir la difficulté du quiz]</option>
+<option value="facile">Facile</option>
+<option value="moyen">Moyen</option>
+<option value="difficile">Difficile</option>
+</select>
+</div>
+</div>
+</div>
+ 
+                <!--Les questions : vide au départ, le script ajoute la question 1 au chargement-->
+<div id="liste-questions"></div>
+ 
                 <button type="button" id="btn-ajouter-question" class="btn-ajouter">+ Ajouter une question</button>
-            </form>
-
+</form>
+ 
+            <!--Modèle d'une question (invisible) : le script le copie et remplace QID par q1, q2, ...-->
+<template id="modele-question">
+<div class="section-2-question" data-js="question">
+ 
+                    <div class="cote-questionnaire">
+<h3 class="question-titre">Question</h3>
+<button type="button" class="btn-supprimer" data-js="btn-supprimer-question">Supprimer</button>
+</div>
+ 
+                    <!--Menu déroulant : type de question-->
+<div class="champ">
+<label for="QID-type">Type de question</label>
+<select id="QID-type" name="QID-type" class="select-type" data-js="type">
+<option value="choix" selected>Choix multiples</option>
+<option value="vf">Vrai / Faux</option>
+</select>
+</div>
+ 
+                    <div class="champ">
+<label for="QID-texte">Intitulé de la question</label>
+<input type="text" id="QID-texte" name="QID-texte" placeholder="[Votre question]" data-js="texte">
+</div>
+ 
+                    <!--Réponses : choix multiples (5 au maximum)-->
+<div class="champ bloc-choix">
+<p class="label-reponses">Réponses (cochez la bonne réponse)</p>
+<div class="reponses-grille" data-js="reponses">
+<div class="reponse">
+<input type="radio" name="QID-bonne" value="0" aria-label="Bonne réponse 1">
+<input type="text" placeholder="[Réponse 1]" aria-label="Réponse 1">
+</div>
+<div class="reponse">
+<input type="radio" name="QID-bonne" value="1" aria-label="Bonne réponse 2">
+<input type="text" placeholder="[Réponse 2]" aria-label="Réponse 2">
+</div>
+<div class="reponse">
+<input type="radio" name="QID-bonne" value="2" aria-label="Bonne réponse 3">
+<input type="text" placeholder="[Réponse 3]" aria-label="Réponse 3">
+</div>
+<div class="reponse">
+<input type="radio" name="QID-bonne" value="3" aria-label="Bonne réponse 4">
+<input type="text" placeholder="[Réponse 4]" aria-label="Réponse 4">
+</div>
+</div>
+<button type="button" class="btn-ajouter-reponse" data-js="btn-ajouter-reponse">+ Ajouter une réponse</button>
+</div>
+ 
+                    <!--Réponses : vrai / faux (le CSS l'affiche seulement si "Vrai / Faux" est choisi)-->
+<div class="champ bloc-vf">
+<p class="label-reponses">Bonne réponse</p>
+<div class="vf-options">
+<label class="vf-option">
+<input type="radio" name="QID-bonne-vf" value="vrai"> Vrai
+</label>
+<label class="vf-option">
+<input type="radio" name="QID-bonne-vf" value="faux"> Faux
+</label>
+</div>
+</div>
+ 
+                </div>
+</template>
+ 
             <!--Aperçu du quiz : vide au départ, le script ajoute les questions au fur et à mesure-->
-            <aside class="apercu" aria-labelledby="apercu-titre">
-                <div class="apercu-entete">
-                    <h2 id="apercu-titre">Aperçu du quiz</h2>
-                    <span class="apercu-compteur" id="apercu-compteur" aria-live="polite">0 / 5 questions</span>
-                </div>
-
+<aside class="apercu" aria-labelledby="apercu-titre">
+<div class="apercu-entete">
+<h2 id="apercu-titre">Aperçu du quiz</h2>
+<span class="apercu-compteur" id="apercu-compteur" aria-live="polite">0 / 5 questions</span>
+</div>
+ 
                 <!--Barre de progression : la largeur de .apercu-progression-remplie = questions / 5-->
-                <div class="apercu-progression" id="apercu-progression" role="progressbar" aria-label="Progression du quiz"
+<div class="apercu-progression" id="apercu-progression" role="progressbar" aria-label="Progression du quiz"
                      aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
-                    <div class="apercu-progression-remplie" id="apercu-progression-remplie" style="width: 0%;"></div>
-                </div>
-
+<div class="apercu-progression-remplie" id="apercu-progression-remplie" style="width: 0%;"></div>
+</div>
+ 
                 <p class="apercu-titre-quiz" id="apercu-titre-quiz">[Titre du quiz]</p>
-
+ 
                 <!--Message affiché tant qu'il n'y a aucune question (le script ajoute l'attribut hidden dès la première)-->
-                <p class="apercu-vide" id="apercu-vide">Aucune question enregistrée pour le moment.</p>
-
+<p class="apercu-vide" id="apercu-vide">Aucune question enregistrée pour le moment.</p>
+ 
                 <!--La liste : vide, le script y ajoute une ligne par question-->
-                <ol class="apercu-liste" id="apercu-liste"></ol>
-
+<ol class="apercu-liste" id="apercu-liste"></ol>
+ 
                 <!--Modèle d'une ligne (invisible) : le script le copie pour chaque question-->
-                <template id="modele-apercu-item">
-                    <li class="apercu-item">
-                        <span class="apercu-numero"></span>
-                        <div class="apercu-contenu">
-                            <p class="apercu-question"></p>
-                            <p class="apercu-type"></p>
-                        </div>
-                    </li>
-                </template>
-            </aside>
-
+<template id="modele-apercu-item">
+<li class="apercu-item">
+<span class="apercu-numero"></span>
+<div class="apercu-contenu">
+<p class="apercu-question"></p>
+<p class="apercu-type"></p>
+</div>
+</li>
+</template>
+ 
+                <!--Boutons en bas de l'aperçu : form="form-quiz" les relie au formulaire même s'ils sont en dehors-->
+<div class="apercu-actions">
+<button type="submit" form="form-quiz" name="action" value="brouillon" class="btn-enregistrer">Enregistrer</button>
+<button type="submit" form="form-quiz" name="action" value="publier" class="btn-publier">Publier</button>
+</div>
+ 
+                <!--Message de succès ou d'erreur (rempli par le script)-->
+<p class="message-quiz" id="message-quiz" aria-live="polite"></p>
+</aside>
+ 
             </div>
-        </main>
-        <!--End main-->
-
+</main>
+<!--End main-->
+ 
         <footer class="footer">
-            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
-        </footer>
-    </div>
-
-
+<p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+</footer>
+</div>
+ 
+   <!-- <script src="script.js"></script>-->
 </body>
 </html>
