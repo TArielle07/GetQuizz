@@ -289,3 +289,9 @@ a:focus-visible {
         transition: none;
     }
 }
+
+/* Dans "Bonjour ...", le nom garde la taille du titre */
+.titre-page .nom-utilisateur {
+    font-size: inherit;
+    font-weight: inherit;
+}
