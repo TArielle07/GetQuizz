@@ -193,9 +193,9 @@ app.post('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) =>
         if (!titre || titre.trim() === '') {
             return res.status(400).json({ message: 'Le titre du quiz est obligatoire.' });
         }
-        if (questions.length > 5) {
-            return res.status(400).json({ message: 'Un quiz peut avoir au maximum 5 questions.' });
-        }
+        //if (questions.length > 5) {
+        //    return res.status(400).json({ message: 'Un quiz peut avoir au maximum 5 questions.' });
+       // }
 
         // Règles en plus pour publier
         if (publier) {

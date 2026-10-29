@@ -116,7 +116,7 @@ if (elBtnDeconnexion) {
    US04 : définir les réponses possibles et la bonne réponse
    ========================================================= */
 
-const MAX_QUESTIONS = 5;
+//const MAX_QUESTIONS = 5;
 const MAX_REPONSES = 5;
 
 let elFormQuiz = document.querySelector("#form-quiz");
@@ -130,8 +130,8 @@ let elBtnAjouterQuestion = document.querySelector("#btn-ajouter-question");
 let elMessageQuiz = document.querySelector("#message-quiz");
 
 // Aperçu (colonne de droite)
-let elApercuTitre = document.querySelector("#apercu-titre-quiz");
-let elApercuCompteur = document.querySelector("#apercu-compteur");
+//let elApercuTitre = document.querySelector("#apercu-titre-quiz");
+//let elApercuCompteur = document.querySelector("#apercu-compteur");
 let elApercuProgression = document.querySelector("#apercu-progression");
 let elApercuRemplie = document.querySelector("#apercu-progression-remplie");
 let elApercuVide = document.querySelector("#apercu-vide");
@@ -230,8 +230,8 @@ if (elFormQuiz) {
 
 // Ajoute une question à partir du modèle <template id="modele-question">
 function ajouterQuestion() {
-    let nbQuestions = elListeQuestions.querySelectorAll("[data-js='question']").length;
-    if (nbQuestions >= MAX_QUESTIONS) return;
+    //let nbQuestions = elListeQuestions.querySelectorAll("[data-js='question']").length;
+    //if (nbQuestions >= MAX_QUESTIONS) return;
 
     compteurQuestions++;
 
@@ -276,7 +276,7 @@ function mettreAJourQuestions() {
         elQuestion.querySelector("[data-js='btn-supprimer-question']").disabled = elQuestions.length === 1;
     });
 
-    elBtnAjouterQuestion.disabled = elQuestions.length >= MAX_QUESTIONS;
+    //elBtnAjouterQuestion.disabled = elQuestions.length >= MAX_QUESTIONS;
 
     mettreAJourApercu();
 }
@@ -311,8 +311,8 @@ function mettreAJourApercu() {
     });
 
     // Compteur et barre de progression
-    let nb = questionsRemplies.length;
-    elApercuCompteur.textContent = nb + " / " + MAX_QUESTIONS + " questions";
+    //let nb = questionsRemplies.length;
+    //elApercuCompteur.textContent = nb + " / " + MAX_QUESTIONS + " questions";
     elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
     elApercuProgression.setAttribute("aria-valuenow", nb);
 
