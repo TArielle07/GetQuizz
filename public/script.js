@@ -315,10 +315,17 @@ function mettreAJourApercu() {
     //elApercuCompteur.textContent = nb + " / " + MAX_QUESTIONS + " questions";
     //elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
     //elApercuProgression.setAttribute("aria-valuenow", nb);
-    elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
-    elApercuProgression.setAttribute("aria-valuenow", nb);
+    //elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
+    //elApercuProgression.setAttribute("aria-valuenow", nb);
 
     // Message "Aucune question..."
+    //elApercuVide.hidden = nb > 0;
+
+
+    // Compteur : "1 question", "3 questions"...
+    let nb = questionsRemplies.length;
+    elApercuCompteur.textContent = nb + (nb > 1 ? " questions" : " question");
+
     elApercuVide.hidden = nb > 0;
 }
 
