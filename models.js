@@ -22,6 +22,8 @@ const User = mongoose.model('User', userSchema, 'users');
 const quizSchema = new mongoose.Schema({
     titre: { type: String, required: true },
     description: { type: String, default: '' },
+    theme: { type: String, default: '' },
+    difficulte: { type: String, enum: ['facile', 'moyen', 'difficile'] },
     // Relation : le quiz appartient à un enseignant
     enseignant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     publie: { type: Boolean, default: false }

@@ -177,7 +177,6 @@ app.post('/api/logout', (req, res) => {
 });
 
 
-
 // Connexion MongoDB et démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
