@@ -1,0 +1,163 @@
+/* ---------- Lien retour + sous-titre ---------- */
+.lien-retour {
+    display: inline-block;
+    margin-bottom: 24px;
+    font-weight: 700;
+    color: #35484B;
+    text-decoration: none;
+}
+
+.lien-retour:hover {
+    text-decoration: underline;
+}
+
+.lien-retour:focus-visible {
+    outline: 3px solid #35484B;
+    outline-offset: 3px;
+}
+
+/* Remonte sous le titre (qui a déjà un margin-bottom de 48px) */
+.sous-titre {
+    margin: -30px 0 48px;
+    font-size: 18px;
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+/* L'attribut hidden doit vraiment cacher la liste (même avec display: grid) */
+.cartes[hidden] {
+    display: none;
+}
+
+/* ---------- Boutons (même style « sticker » que Déconnexion) ---------- */
+.bouton {
+    display: inline-block;
+    padding: 10px 22px;
+    background-color: #F8B9CA;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: #35484B;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #35484b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bouton:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #35484b;
+}
+
+.bouton:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #35484b;
+}
+
+.bouton:focus-visible {
+    outline: 3px solid #35484B;
+    outline-offset: 3px;
+}
+
+.bouton-turquoise { background-color: #9EE2DB; }
+.bouton-blanc     { background-color: #ffffff; }
+
+/* ---------- État vide (carte centrée) ---------- */
+.etat-vide {
+    max-width: 560px;
+    padding: 40px 32px;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    cursor: default;
+}
+
+/* Pas d'effet de survol/clic : ce n'est pas un lien */
+.etat-vide:hover,
+.etat-vide:active {
+    transform: none;
+    box-shadow:
+        2px 2px 0 #9ee2db,
+        4px 4px 0 #7fcfc7,
+        6px 6px 0 #5fb8af,
+        8px 8px 0 #43a097,
+        10px 10px 0 #35484b;
+}
+
+.etat-vide-icone {
+    font-size: 48px;
+    line-height: 1;
+}
+
+.etat-vide .bouton {
+    margin-top: 10px;
+}
+
+/* ---------- Contenu des futures cartes ---------- */
+.carte-infos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.carte-infos li {
+    padding: 3px 12px;
+    background-color: rgba(255, 255, 255, 0.65);
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.carte-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: auto;      /* boutons toujours en bas de la carte */
+    padding-top: 12px;
+}
+
+/* ---------- Brouillons : badge + barre de progression ---------- */
+.carte {
+    position: relative;    /* pour placer le badge */
+}
+
+.badge {
+    position: absolute;
+    top: -14px;
+    right: 20px;
+    padding: 3px 12px;
+    background-color: #ffffff;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 #35484b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.progression-texte {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.progression {
+    height: 16px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progression span {
+    display: block;
+    height: 100%;
+    background-color: #9EE2DB;
+    border-right: 2px solid #35484B;
+}
