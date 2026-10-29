@@ -267,7 +267,21 @@ app.post('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) =>
     }
 });
 
+// Liste des quiz de l'enseignant connecté
+// /api/quiz?statut=publie -> Mes quiz   |   /api/quiz?statut=brouillon -> Brouillons
+app.get('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        const filtre = { enseignant: req.session.utilisateur.id };
+        if (req.query.statut === 'publie') filtre.publie = true;
+        if (req.query.statut === 'brouillon') filtre.publie = false;
 
+        const quiz = await Quiz.find(filtre).sort({ updatedAt: -1 });
+        res.json(quiz);
+    } catch (err) {
+        console.error('Erreur liste des quiz :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
 
 
 // Connexion MongoDB et démarrage du serveur
