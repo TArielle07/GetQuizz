@@ -439,6 +439,65 @@ function afficherMessageQuiz(texte, type) {
     elMessageQuiz.className = "message-quiz message-" + type;
 }
 
+
+/* =========================================================
+   PAGE MOT DE PASSE (mot-de-passe.html)
+   ========================================================= */
+
+let elFormMotDePasse = document.querySelector("#form-mot-de-passe");
+
+if (elFormMotDePasse) {
+    elFormMotDePasse.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        let elMessage = document.querySelector("#messageErreur");
+        let ancien = document.querySelector("#ancien").value;
+        let nouveau = document.querySelector("#nouveau").value;
+        let confirmation = document.querySelector("#confirm").value;
+
+        elMessage.style.color = "";
+
+        // Validation avant d'envoyer au serveur
+        if (!ancien || !nouveau || !confirmation) {
+            elMessage.textContent = "Veuillez remplir tous les champs";
+            return;
+        }
+        if (nouveau.length < 8) {
+            elMessage.textContent = "Le nouveau mot de passe doit avoir au moins 8 caractères";
+            return;
+        }
+        if (nouveau !== confirmation) {
+            elMessage.textContent = "Les deux nouveaux mots de passe ne sont pas identiques";
+            return;
+        }
+
+        try {
+            let reponse = await fetch(API_URL + "/mot-de-passe", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ancien, nouveau })
+            });
+            let resultat = await reponse.json();
+
+            // On affiche le message du serveur (succès ou erreur)
+            elMessage.textContent = resultat.message;
+            if (reponse.ok) {
+                elMessage.style.color = "green";
+                elFormMotDePasse.reset();
+            }
+        } catch (error) {
+            elMessage.textContent = "Impossible de joindre le serveur";
+        }
+    });
+}
+
+
+
+
+
+
+
+
 // TODO : afficher la liste des quiz de l'enseignant (mes-quiz.html)
 
 /* =========================================================
