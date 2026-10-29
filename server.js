@@ -312,6 +312,33 @@ app.get('/api/quiz/:id', verifierConnexion, verifierEnseignant, async (req, res)
 });
 
 
+// ===== MOT DE PASSE =====
+app.put('/api/mot-de-passe', verifierConnexion, async (req, res) => {
+    try {
+        const { ancien, nouveau } = req.body;
+
+        if (!ancien || !nouveau) {
+            return res.status(400).json({ message: 'Veuillez remplir tous les champs.' });
+        }
+        if (nouveau.length < 8) {
+            return res.status(400).json({ message: 'Minimum 8 caractères.' });
+        }
+
+        const utilisateur = await User.findById(req.session.utilisateur.id);
+        if (!utilisateur || !(await bcrypt.compare(ancien, utilisateur.mot_de_passe))) {
+            return res.status(401).json({ message: 'Ancien mot de passe incorrect.' });
+        }
+
+        utilisateur.mot_de_passe = nouveau;
+        await utilisateur.save(); // le pre('save') de models.js hache le mot de passe
+
+        res.json({ message: 'Mot de passe modifié.' });
+    } catch (err) {
+        console.error('Erreur mot de passe :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
 // Connexion MongoDB et démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
