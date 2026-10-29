@@ -130,8 +130,8 @@ let elBtnAjouterQuestion = document.querySelector("#btn-ajouter-question");
 let elMessageQuiz = document.querySelector("#message-quiz");
 
 // Aperçu (colonne de droite)
-//let elApercuTitre = document.querySelector("#apercu-titre-quiz");
-//let elApercuCompteur = document.querySelector("#apercu-compteur");
+let elApercuTitre = document.querySelector("#apercu-titre-quiz");
+let elApercuCompteur = document.querySelector("#apercu-compteur");
 let elApercuProgression = document.querySelector("#apercu-progression");
 let elApercuRemplie = document.querySelector("#apercu-progression-remplie");
 let elApercuVide = document.querySelector("#apercu-vide");
@@ -313,6 +313,8 @@ function mettreAJourApercu() {
     // Compteur et barre de progression
     //let nb = questionsRemplies.length;
     //elApercuCompteur.textContent = nb + " / " + MAX_QUESTIONS + " questions";
+    //elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
+    //elApercuProgression.setAttribute("aria-valuenow", nb);
     elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
     elApercuProgression.setAttribute("aria-valuenow", nb);
 
