@@ -89,14 +89,23 @@ let elsNomUtilisateur = document.querySelectorAll(".nom-utilisateur");
 // Si personne n'est connecté, retour à la page de connexion
 // Afficher le nom de la personne connectée (profil + "Bonjour ...")
 if (elsNomUtilisateur.length > 0) {
-    let nom = sessionStorage.getItem("nomUtilisateur");
-
-    if (nom) {
-        elsNomUtilisateur.forEach(el => el.textContent = nom);
-    } else {
-        window.location.href = "connexion.html";
-    }
+    // On demande au serveur qui est vraiment connecté
+    fetch(API_URL + "/enseignant")
+        .then(reponse => {
+            if (!reponse.ok) throw new Error();
+            return reponse.json();
+        })
+        .then(utilisateur => {
+            elsNomUtilisateur.forEach(el => el.textContent = utilisateur.nom);
+        })
+        .catch(() => {
+            // Session fermée ou serveur relancé : retour à la connexion
+            sessionStorage.removeItem("nomUtilisateur");
+            window.location.href = "connexion.html";
+        });
 }
+
+
 // Déconnexion : fermer la session avant de quitter la page
 let elBtnDeconnexion = document.querySelector(".btn-deconnexion");
 
