@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 
     <!--CSS-->
-    <link rel="stylesheet" href="css/style-creer.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="grid-container">
@@ -26,7 +26,7 @@
 
             <!--Logo au centre (retour au tableau de bord)-->
             <a href="enseignant.html" class="header-logo">
-                <img src="GetQuiz_logo_lettres" alt="GetQuiz">
+                <img src="GetQuiz_logo_lettres.png" alt="GetQuiz">
             </a>
 
             <!--Déconnexion à droite-->
@@ -36,6 +36,8 @@
 
         <!--Main-->
         <main class="main-container">
+            <div class="creer-layout">
+
             <form id="form-quiz" class="formulaire">
 
                 <!--Section 1 : titre de la page et boutons-->
@@ -136,6 +138,41 @@
 
                 <button type="button" id="btn-ajouter-question" class="btn-ajouter">+ Ajouter une question</button>
             </form>
+
+            <!--Aperçu du quiz : vide au départ, le script ajoute les questions au fur et à mesure-->
+            <aside class="apercu" aria-labelledby="apercu-titre">
+                <div class="apercu-entete">
+                    <h2 id="apercu-titre">Aperçu du quiz</h2>
+                    <span class="apercu-compteur" id="apercu-compteur" aria-live="polite">0 / 5 questions</span>
+                </div>
+
+                <!--Barre de progression : la largeur de .apercu-progression-remplie = questions / 5-->
+                <div class="apercu-progression" id="apercu-progression" role="progressbar" aria-label="Progression du quiz"
+                     aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+                    <div class="apercu-progression-remplie" id="apercu-progression-remplie" style="width: 0%;"></div>
+                </div>
+
+                <p class="apercu-titre-quiz" id="apercu-titre-quiz">[Titre du quiz]</p>
+
+                <!--Message affiché tant qu'il n'y a aucune question (le script ajoute l'attribut hidden dès la première)-->
+                <p class="apercu-vide" id="apercu-vide">Aucune question enregistrée pour le moment.</p>
+
+                <!--La liste : vide, le script y ajoute une ligne par question-->
+                <ol class="apercu-liste" id="apercu-liste"></ol>
+
+                <!--Modèle d'une ligne (invisible) : le script le copie pour chaque question-->
+                <template id="modele-apercu-item">
+                    <li class="apercu-item">
+                        <span class="apercu-numero"></span>
+                        <div class="apercu-contenu">
+                            <p class="apercu-question"></p>
+                            <p class="apercu-type"></p>
+                        </div>
+                    </li>
+                </template>
+            </aside>
+
+            </div>
         </main>
         <!--End main-->
 
