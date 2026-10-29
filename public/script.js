@@ -48,6 +48,8 @@ if (elFormConnexion) {
                 if (!reponse.ok) throw new Error();
 
                 let utilisateur = await reponse.json();
+                                // On garde le nom pour l'afficher sur les autres pages
+                sessionStorage.setItem("nomUtilisateur", utilisateur.nom);
 
                 // Redirection selon le rôle
                 if (utilisateur.role === "enseignant") {
@@ -84,22 +86,19 @@ let elNomUtilisateur = document.querySelector("#nomUtilisateur");
 
 // Afficher le nom de la personne connectée
 // Si personne n'est connecté, retour à la page de connexion
+// Afficher le nom de la personne connectée (profil + "Bonjour ...")
 if (elNomUtilisateur) {
-    fetch(API_URL + "/enseignant")
-        .then(reponse => {
-            if (!reponse.ok) {
-                window.location.href = "connexion.html";
-                return;
-            }
-            return reponse.json();
-        })
-        .then(utilisateur => {
-            if (utilisateur && utilisateur.nom) {
-                elNomUtilisateur.textContent = utilisateur.nom;
-            }
-        });
-}
+    let nom = sessionStorage.getItem("nomUtilisateur");
 
+    if (nom) {
+        document.querySelectorAll(".nom-utilisateur").forEach(el => {
+            el.textContent = nom;
+        });
+    } else {
+        // Personne ne s'est connecté : retour à la page de connexion
+        window.location.href = "connexion.html";
+    }
+}
 // Déconnexion : fermer la session avant de quitter la page
 let elBtnDeconnexion = document.querySelector(".btn-deconnexion");
 
@@ -107,6 +106,7 @@ if (elBtnDeconnexion) {
     elBtnDeconnexion.addEventListener("click", async (e) => {
         e.preventDefault();
         await fetch(API_URL + "/logout", { method: "POST" });
+                sessionStorage.removeItem("nomUtilisateur");
         window.location.href = "connexion.html";
     });
 }
