@@ -36,27 +36,25 @@
         </header>
         <!--End header-->
 
-       <main>
-    <a class="back-link" href="enseignant.html">← Retour à l’accueil</a>
- 
-    <h1 class="page-title">
-      Voici tous vos <span class="highlight">quiz publiés</span> !
+    <main class="main-container">
+    <a class="lien-retour" href="enseignant.html">← Retour à l’accueil</a>
+
+    <h1 class="titre-page">
+        Voici tous vos <span class="mot-accent">quiz publiés</span> !
     </h1>
-    <p class="subtitle">Retrouvez tous vos quiz publiés au même endroit.</p>
- 
+    <p class="sous-titre">Retrouvez tous vos quiz publiés au même endroit.</p>
+
     <!-- Liste des quiz : les cartes seront ajoutées ici quand les données existeront -->
-    <section class="grid" id="quiz-list" style="display:none">
-      
-    </section>
- 
+    <section class="cartes" id="quiz-list" hidden></section>
+
     <!-- État vide : à masquer quand il y a au moins un quiz -->
-    <section class="empty-state" id="quiz-empty">
-      <div class="empty-icon">📝</div>
-      <h2>Aucun quiz publié pour le moment</h2>
-      <p>Vous n’avez pas encore publié de quiz. Créez-en un, et il apparaîtra ici.</p>
-      <a class="btn mint" href="creer-quiz.html">+ Créer un quiz</a>
+    <section class="carte carte-turquoise-clair etat-vide" id="quiz-empty">
+        <div class="etat-vide-icone">📝</div>
+        <h2>Aucun quiz publié pour le moment</h2>
+        <p class="carte-texte">Vous n’avez pas encore publié de quiz. Créez-en un, et il apparaîtra ici.</p>
+        <a class="bouton bouton-turquoise" href="creer-quiz.html">+ Créer un quiz</a>
     </section>
-  </main>
+    </main>
 
         <footer class="footer">
             <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
