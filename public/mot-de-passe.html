@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GetQuizz - Mot de passe</title>
+<link rel="preconnect" target=_blank href="https://fonts.googleapis.com">
+<link target=_blank href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<!--CSS (même style que la connexion)-->
+<link rel="stylesheet" target=_blank href="css/style_connexion.css">
+<link rel="stylesheet" target=_blank href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+  <main class="panneau">
+    <!--id différent de "connexion" pour ne pas lancer le script de connexion-->
+    <form id="form-mot-de-passe" novalidate>
+      <h1><img class="logo" src="GetQuiz_logo.png" alt="GetQuizz"></h1>
+
+
+      <div class="field">
+        <label for="ancien">Mot de passe actuel <span class="required">*</span></label>
+        <div class="input-wrapper">
+          <input id="ancien" name="ancien" type="password" placeholder="Entrez votre mot de passe actuel" autocomplete="current-password" required>
+          <i class="fa-solid fa-eye-slash eye-icon" onclick="togglePassword('ancien', this)"></i>
+        </div>
+      </div>
+
+
+      <div class="field">
+        <label for="nouveau">Nouveau mot de passe <span class="required">*</span></label>
+        <div class="input-wrapper">
+          <input id="nouveau" name="nouveau" type="password" placeholder="8 caractères minimum" autocomplete="new-password" minlength="8" required>
+          <i class="fa-solid fa-eye-slash eye-icon" onclick="togglePassword('nouveau', this)"></i>
+        </div>
+      </div>
+
+
+      <div class="field">
+        <label for="confirm">Confirmer le nouveau mot de passe <span class="required">*</span></label>
+        <div class="input-wrapper">
+          <input id="confirm" name="confirm" type="password" placeholder="Entrez à nouveau le nouveau mot de passe" autocomplete="new-password" minlength="8" required>
+          <i class="fa-solid fa-eye-slash eye-icon" onclick="togglePassword('confirm', this)"></i>
+        </div>
+      </div>
+
+
+      <!--Même id que dans connexion.html : le style d'erreur existe déjà dans le CSS-->
+      <p id="messageErreur" class="field-error"></p>
+
+
+      <button class="signup" type="submit">Changer le mot de passe</button>
+
+
+      <p class="signin"><a target=_blank href="enseignant.html">← Retour au tableau de bord</a></p>
+    </form>
+  </main>
+
+
+  <img src="imageGetQuiz.avif" alt="Deux étudiants révisent sur une pelouse" class="image-connexion">
+
+
+  <script src="script.js"></script>
+</body>
+</html>
