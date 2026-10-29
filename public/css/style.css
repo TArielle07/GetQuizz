@@ -156,6 +156,41 @@ a:focus-visible {
     outline-offset: 3px;
 }
 
+/* ---------- Bouton mot de passe : en bas à droite, au-dessus du footer ---------- */
+.main-accueil {
+    display: flex;
+    flex-direction: column;     /* permet de pousser le bouton vers le bas */
+}
+
+.main-accueil .cartes {
+    margin-bottom: 40px;        /* espace entre les cartes et le bouton */
+}
+
+.btn-mot-de-passe {
+    margin-top: auto;           /* collé en bas de la zone de contenu */
+    align-self: flex-end;       /* à droite */
+    padding: 12px 26px;
+    background-color: #F8B9CA;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #35484B;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 #35484b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-mot-de-passe:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #35484b;
+}
+
+.btn-mot-de-passe:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #35484b;
+}
+
 /* ---------- CONTENU ---------- */
 .main-container {
     padding: 40px 48px 56px;
