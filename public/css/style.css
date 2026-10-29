@@ -25,7 +25,7 @@ body {
     grid-template-columns: 1fr auto 1fr;   /* profil | logo | déconnexion */
     align-items: center;
     gap: 24px;
-    padding: 28px 48px 40px;
+    padding: 14px 40px 18px;
     background-color: #9EE2DB;
     /* léger éclat en haut + motif de petits points */
     background-image:
@@ -44,18 +44,18 @@ body {
 }
 
 .header::before {
-    width: 190px;
-    height: 190px;
-    left: -60px;
-    top: -90px;
+    width: 120px;
+    height: 120px;
+    left: -40px;
+    top: -60px;
     background-color: rgba(248, 185, 202, 0.6);
 }
 
 .header::after {
-    width: 240px;
-    height: 240px;
-    right: -80px;
-    bottom: -130px;
+    width: 150px;
+    height: 150px;
+    right: -50px;
+    bottom: -85px;
     background-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -74,7 +74,7 @@ body {
 
 .header-logo img {
     display: block;
-    height: 130px;
+    height: 80px;
     width: auto;
 }
 
@@ -87,17 +87,17 @@ body {
 }
 
 .header-logo::before {
-    width: 30px;
-    height: 30px;
-    left: -44px;
-    top: 4px;
+    width: 24px;
+    height: 24px;
+    left: -34px;
+    top: 0;
 }
 
 .header-logo::after {
-    width: 22px;
-    height: 22px;
-    right: -40px;
-    bottom: 10px;
+    width: 18px;
+    height: 18px;
+    right: -30px;
+    bottom: 4px;
 }
 
 /* Profil à gauche : pastille "sticker" avec ombre dure */
@@ -106,7 +106,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 6px 24px 6px 6px;
+    padding: 5px 20px 5px 5px;
     background-color: #ffffff;
     border: 2px solid #35484B;
     border-radius: 999px;
@@ -114,8 +114,8 @@ body {
 }
 
 .profil-cercle {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background-color: #F8B9CA;
     border: 2px solid #35484B;
     border-radius: 50%;
@@ -129,7 +129,7 @@ body {
 /* Déconnexion à droite : même style sticker, en rose */
 .btn-deconnexion {
     justify-self: end;
-    padding: 12px 26px;
+    padding: 9px 22px;
     background-color: #F8B9CA;
     border: 2px solid #35484B;
     border-radius: 999px;
@@ -172,10 +172,6 @@ a:focus-visible {
 /* Mot mis en valeur : trait rose façon surligneur */
 .mot-accent {
     background: linear-gradient(transparent 62%, #F8B9CA 62%);
-}
-
-.titre-page .nom-utilisateur {
-    font-size: inherit;
 }
 
 /* 4 cartes : elles passent à 2 puis 1 par ligne si l'écran est étroit */
@@ -265,7 +261,7 @@ a:focus-visible {
     /* Le logo passe sur sa propre ligne, profil et déconnexion en dessous */
     .header {
         grid-template-columns: 1fr 1fr;
-        padding: 20px 24px 32px;
+        padding: 14px 24px 18px;
     }
 
     .header-logo {
@@ -274,7 +270,7 @@ a:focus-visible {
     }
 
     .header-logo img {
-        height: 100px;
+        height: 64px;
     }
 
     .header-logo::before,

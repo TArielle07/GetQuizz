@@ -1,17 +1,17 @@
 /* ==========================================================
    GetQuiz : page "Créer un quiz" (dashboard enseignant)
    ========================================================== */
-
+ 
 * {
     box-sizing: border-box;
 }
-
+ 
 /* Les éléments avec l'attribut "hidden" restent cachés,
    même si on leur a donné un display (flex, grid...) */
 [hidden] {
     display: none !important;
 }
-
+ 
 body {
     margin: 0;
     padding: 0;
@@ -19,14 +19,15 @@ body {
     color: #35484B;
     font-family: "Quicksand", sans-serif;
 }
-
+ 
 /* Les champs et boutons reprennent la police de la page */
 input,
 select,
+textarea,
 button {
     font-family: inherit;
 }
-
+ 
 /* ---------- Grille de la page : header / main / footer ---------- */
 .grid-container {
     display: grid;
@@ -38,7 +39,7 @@ button {
         "footer";
     height: 100vh;
 }
-
+ 
 /* ==========================================================
    HEADER : profil à gauche, logo au centre, déconnexion à droite
    ========================================================== */
@@ -51,7 +52,7 @@ button {
     grid-template-columns: 1fr auto 1fr;   /* profil | logo | déconnexion */
     align-items: center;
     gap: 24px;
-    padding: 28px 48px 40px;
+    padding: 14px 40px 18px;
     background-color: #9EE2DB;
     /* léger éclat en haut + motif de petits points */
     background-image:
@@ -59,7 +60,7 @@ button {
         radial-gradient(circle, rgba(255, 255, 255, 0.55) 2px, transparent 2.5px);
     background-size: auto, 22px 22px;
 }
-
+ 
 /* Grands cercles décoratifs en arrière-plan */
 .header::before,
 .header::after {
@@ -68,23 +69,23 @@ button {
     border-radius: 50%;
     pointer-events: none;
 }
-
+ 
 .header::before {
-    width: 190px;
-    height: 190px;
-    left: -60px;
-    top: -90px;
+    width: 120px;
+    height: 120px;
+    left: -40px;
+    top: -60px;
     background-color: rgba(248, 185, 202, 0.6);
 }
-
+ 
 .header::after {
-    width: 240px;
-    height: 240px;
-    right: -80px;
-    bottom: -130px;
+    width: 150px;
+    height: 150px;
+    right: -50px;
+    bottom: -85px;
     background-color: rgba(255, 255, 255, 0.4);
 }
-
+ 
 /* Le contenu passe devant les cercles */
 .profil,
 .header-logo,
@@ -92,18 +93,18 @@ button {
     position: relative;
     z-index: 1;
 }
-
+ 
 /* Logo : très gros et centré, avec des étoiles autour */
 .header-logo {
     justify-self: center;
 }
-
+ 
 .header-logo img {
     display: block;
-    height: 130px;
+    height: 80px;
     width: auto;
 }
-
+ 
 .header-logo::before,
 .header-logo::after {
     content: "";
@@ -111,51 +112,51 @@ button {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12,2 15,9 22,9.5 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9.5 9,9' fill='white' stroke='%2335484b' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
     pointer-events: none;
 }
-
+ 
 .header-logo::before {
-    width: 30px;
-    height: 30px;
-    left: -44px;
-    top: 4px;
+    width: 24px;
+    height: 24px;
+    left: -34px;
+    top: 0;
 }
-
+ 
 .header-logo::after {
-    width: 22px;
-    height: 22px;
-    right: -40px;
-    bottom: 10px;
+    width: 18px;
+    height: 18px;
+    right: -30px;
+    bottom: 4px;
 }
-
+ 
 /* Profil à gauche : pastille "sticker" avec ombre dure */
 .profil {
     justify-self: start;
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 6px 24px 6px 6px;
+    padding: 5px 20px 5px 5px;
     background-color: #ffffff;
     border: 2px solid #35484B;
     border-radius: 999px;
     box-shadow: 4px 4px 0 #35484b;
 }
-
+ 
 .profil-cercle {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background-color: #F8B9CA;
     border: 2px solid #35484B;
     border-radius: 50%;
 }
-
+ 
 .nom-utilisateur {
     font-size: medium;
     font-weight: 700;
 }
-
+ 
 /* Déconnexion à droite : même style sticker, en rose */
 .btn-deconnexion {
     justify-self: end;
-    padding: 12px 26px;
+    padding: 9px 22px;
     background-color: #F8B9CA;
     border: 2px solid #35484B;
     border-radius: 999px;
@@ -166,17 +167,17 @@ button {
     box-shadow: 4px 4px 0 #35484b;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
+ 
 .btn-deconnexion:hover {
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0 #35484b;
 }
-
+ 
 .btn-deconnexion:active {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0 #35484b;
 }
-
+ 
 /* ==========================================================
    MAIN : espace autour de tout le contenu
    ========================================================== */
@@ -186,49 +187,54 @@ button {
     padding: 32px;
     overflow-y: auto;
 }
-
-/* Le formulaire ne s'étire pas trop sur les grands écrans */
-.formulaire {
-    max-width: 900px;
+ 
+/* Deux colonnes : le formulaire à gauche, l'aperçu du quiz à droite */
+.creer-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+    max-width: 1240px;
     margin: 0 auto;
 }
-
-/* ---------- Section 1 : titre et boutons ---------- */
+ 
+.formulaire {
+    min-width: 0;
+}
+ 
+/* ---------- Section 1 : retour au dashboard et titre ---------- */
 .section-1 {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
     padding: 0 0 20px;
 }
-
+ 
 .section-1 h2 {
-    margin: 0 auto 0 0;
+    margin: 0;
     color: #35484B;
 }
-
-.section-1 button {
-    padding: 12px 16px;
+ 
+/* Bouton "Retour au tableau de bord" : même style sticker que le header */
+.btn-retour {
+    padding: 8px 18px;
+    background-color: #ffffff;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-size: 14px;
     font-weight: 700;
     color: #35484B;
-    border: 0;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: filter 0.2s ease;
+    text-decoration: none;
+    box-shadow: 3px 3px 0 #35484b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
-.section-1 button[value="brouillon"] {
-    background-color: #9EE2DB;
+ 
+.btn-retour:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 #35484b;
 }
-
-.section-1 button[value="publier"] {
-    background-color: #F8B9CA;
-}
-
-.section-1 button:hover {
-    filter: brightness(0.95);
-}
-
+ 
 /* ==========================================================
    CARTES : informations du quiz (turquoise) et questions (rose)
    ========================================================== */
@@ -242,35 +248,35 @@ button {
     gap: 12px;
     font-weight: 700;
 }
-
+ 
 .section-2 {
     background-color: #d2f4f0;
 }
-
+ 
 .section-2-question {
     background-color: #F8B9CA;
 }
-
+ 
 /* Un label + son champ */
 .champ {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
-
+ 
 .champ label,
 .label-reponses {
     margin: 0;
     font-size: 13px;
 }
-
+ 
 /* Thème et Difficulté côte à côte */
 .ligne-2-champs {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
-
+ 
 /* Champs blancs, sans bordure (texte et menus déroulants) */
 .section-2 input,
 .section-2 select,
@@ -286,38 +292,63 @@ button {
     font-weight: inherit;
     color: #35484B;
 }
-
+ 
+/* Description : zone de texte plus haute */
+.section-2 textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: inherit;
+    color: #35484B;
+    resize: vertical;
+}
+ 
+.section-2 textarea::placeholder {
+    color: #757575;
+    opacity: 1;
+}
+ 
+/* Champ en erreur (ajouté par script.js) */
+.erreur {
+    outline: 2px solid #c0392b;
+    outline-offset: 1px;
+}
+ 
 /* Placeholders grisés */
 .section-2 input::placeholder,
 .section-2-question input::placeholder {
     color: #757575;
     opacity: 1;
 }
-
+ 
 /* Menu déroulant : gris tant que rien n'est choisi */
 .section-2 select:required:invalid,
 .section-2-question select:required:invalid {
     color: #757575;
 }
-
+ 
 .section-2 select option,
 .section-2-question select option {
     color: #35484B;
 }
-
+ 
 /* ---------- Question : en-tête ---------- */
 .cote-questionnaire {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
+ 
 .cote-questionnaire h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 700;
 }
-
+ 
 .btn-supprimer {
     padding: 8px 12px;
     background: transparent;
@@ -329,34 +360,34 @@ button {
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
-
+ 
 .btn-supprimer:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
-
+ 
 .btn-supprimer:disabled {
     opacity: 0.45;
     cursor: not-allowed;
 }
-
+ 
 /* ---------- Choix multiples : 4 réponses en 2 colonnes ---------- */
 .reponses-grille {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px 16px;
 }
-
+ 
 .reponse {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-
+ 
 .reponse input[type="text"] {
     flex: 1;
     width: auto;
 }
-
+ 
 /* Boutons radio : cercle blanc, centre turquoise quand coché */
 .section-2-question input[type="radio"] {
     appearance: none;
@@ -370,34 +401,34 @@ button {
     border-radius: 50%;
     cursor: pointer;
 }
-
+ 
 .section-2-question input[type="radio"]:checked {
     border-color: #35484B;
     background-color: #9EE2DB;
     box-shadow: inset 0 0 0 4px #ffffff;
 }
-
+ 
 /* ---------- Type de question : affichage des réponses sans JavaScript ---------- */
 /* Par défaut : choix multiples */
 .bloc-vf {
     display: none;
 }
-
+ 
 /* Si "Vrai / Faux" est choisi dans le menu : on inverse les deux blocs */
 .section-2-question:has(.select-type option[value="vf"]:checked) .bloc-choix {
     display: none;
 }
-
+ 
 .section-2-question:has(.select-type option[value="vf"]:checked) .bloc-vf {
     display: flex;
 }
-
+ 
 /* ---------- Vrai / Faux ---------- */
 .vf-options {
     display: flex;
     gap: 24px;
 }
-
+ 
 .vf-option {
     display: flex;
     align-items: center;
@@ -405,7 +436,24 @@ button {
     font-size: 14px;
     cursor: pointer;
 }
-
+ 
+/* ---------- Bouton "+ Ajouter une réponse" (5 réponses au maximum) ---------- */
+.btn-ajouter-reponse {
+    align-self: flex-start;
+    padding: 6px 12px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #35484B;
+    cursor: pointer;
+}
+ 
+.btn-ajouter-reponse:hover {
+    background-color: #ffffff;
+}
+ 
 /* ---------- Bouton "+ Ajouter une question" ---------- */
 .btn-ajouter {
     padding: 12px 20px;
@@ -418,17 +466,17 @@ button {
     cursor: pointer;
     transition: filter 0.2s ease;
 }
-
+ 
 .btn-ajouter:hover {
     filter: brightness(0.95);
 }
-
+ 
 .btn-ajouter:disabled {
     opacity: 0.45;
     cursor: not-allowed;
     filter: none;
 }
-
+ 
 /* ---------- Contour visible quand on navigue au clavier ---------- */
 input:focus-visible,
 select:focus-visible,
@@ -437,7 +485,167 @@ a:focus-visible {
     outline: 3px solid #35484B;
     outline-offset: 2px;
 }
-
+ 
+/* ==========================================================
+   APERÇU DU QUIZ (colonne de droite)
+   ========================================================== */
+.apercu {
+    position: sticky;      /* reste visible quand on descend dans le formulaire */
+    top: 16px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 2px solid #9EE2DB;
+    border-radius: 10px;
+}
+ 
+.apercu-entete {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+ 
+.apercu-entete h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+ 
+.apercu-compteur {
+    font-size: 13px;
+    font-weight: 700;
+}
+ 
+/* Barre de progression */
+.apercu-progression {
+    height: 10px;
+    margin: 12px 0 16px;
+    background-color: #d2f4f0;
+    border-radius: 999px;
+    overflow: hidden;
+}
+ 
+.apercu-progression-remplie {
+    height: 100%;
+    background-color: #9EE2DB;
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+ 
+.apercu-titre-quiz {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 700;
+}
+ 
+.apercu-vide {
+    margin: 0;
+    font-size: 14px;
+    color: #757575;
+}
+ 
+/* Liste des questions */
+.apercu-liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+.apercu-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    background-color: #f7fbfb;
+    border-radius: 8px;
+}
+ 
+.apercu-numero {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    background-color: #F8B9CA;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+}
+ 
+.apercu-contenu {
+    min-width: 0;
+}
+ 
+.apercu-question {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+ 
+.apercu-type {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #5b6e70;
+}
+ 
+/* Boutons Enregistrer / Publier en bas de l'aperçu */
+.apercu-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+ 
+.apercu-actions button {
+    padding: 12px 16px;
+    font-weight: 700;
+    color: #35484B;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+ 
+.btn-enregistrer {
+    background-color: #9EE2DB;
+}
+ 
+.btn-publier {
+    background-color: #F8B9CA;
+}
+ 
+.apercu-actions button:hover {
+    filter: brightness(0.95);
+}
+ 
+.apercu-actions button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+ 
+/* Message sous les boutons */
+.message-quiz {
+    margin: 12px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+ 
+.message-quiz:empty {
+    display: none;
+}
+ 
+.message-succes {
+    color: #1e7e5a;
+}
+ 
+.message-erreur {
+    color: #c0392b;
+}
+ 
 /* ==========================================================
    FOOTER
    ========================================================== */
@@ -451,11 +659,11 @@ a:focus-visible {
     background-color: #dafbf7;
     font-size: 13px;
 }
-
+ 
 .footer-copy {
     margin: 0;
 }
-
+ 
 /* ==========================================================
    PETITS ÉCRANS
    ========================================================== */
@@ -463,40 +671,50 @@ a:focus-visible {
     /* Le logo passe sur sa propre ligne, profil et déconnexion en dessous */
     .header {
         grid-template-columns: 1fr 1fr;
-        padding: 20px 24px 32px;
+        padding: 14px 24px 18px;
     }
-
+ 
     .header-logo {
         grid-column: 1 / -1;
         grid-row: 1;
     }
-
+ 
     .header-logo img {
-        height: 100px;
+        height: 64px;
     }
-
+ 
     .header-logo::before,
     .header-logo::after {
         display: none;
     }
 }
-
+ 
 @media (max-width: 760px) {
     .ligne-2-champs,
     .reponses-grille {
         grid-template-columns: 1fr;
     }
-
-    .section-1 {
-        flex-wrap: wrap;
+ 
+}
+ 
+@media (max-width: 1000px) {
+    /* L'aperçu passe sous le formulaire */
+    .creer-layout {
+        grid-template-columns: 1fr;
+    }
+ 
+    .apercu {
+        position: static;
     }
 }
-
+ 
 @media (prefers-reduced-motion: reduce) {
     .btn-deconnexion,
-    .section-1 button,
+    .btn-retour,
+    .apercu-actions button,
     .btn-supprimer,
-    .btn-ajouter {
+    .btn-ajouter,
+    .apercu-progression-remplie {
         transition: none;
     }
 }
