@@ -167,8 +167,9 @@ a:focus-visible {
 }
 
 .btn-mot-de-passe {
-    margin-top: auto;           /* collé en bas de la zone de contenu */
-    align-self: flex-end;       /* à droite */
+    margin-top: 0;           /* collé en bas de la zone de contenu */
+    align-self: center;       /* à droite */
+    margin-left: 0;
     padding: 12px 26px;
     background-color: #F8B9CA;
     border: 2px solid #35484B;
