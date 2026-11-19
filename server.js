@@ -337,6 +337,40 @@ app.put('/api/mot-de-passe', verifierConnexion, async (req, res) => {
     }
 });
 
+
+
+
+// ===== ÉTUDIANT =====
+// Vérifier que l'utilisateur connecté est un étudiant
+function verifierEtudiant(req, res, next) {
+    if (req.session.utilisateur.role !== 'etudiant') {
+        return res.status(403).json({ message: 'Accès réservé aux étudiants.' });
+    }
+    next();
+}
+
+// Infos de l'étudiant connecté (pour afficher son nom)
+app.get('/api/etudiant', verifierConnexion, verifierEtudiant, (req, res) => {
+    res.json(req.session.utilisateur);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Connexion MongoDB et démarrage du serveur
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
