@@ -1,11 +1,9 @@
-
-
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
 //const { User } = require('./models');
-const { User, Quiz, Question, Reponse, verifierReponses } = require('./models');
+const { User, Quiz, Question, Reponse, Tentative, verifierReponses } = require('./models');
 require('dotenv').config();
 
 const app = express();

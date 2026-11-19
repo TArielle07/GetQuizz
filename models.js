@@ -52,6 +52,30 @@ const reponseSchema = new mongoose.Schema({
 
 const Reponse = mongoose.model('Reponse', reponseSchema, 'reponses');
 
+
+//Table des tentatives : les réponses d'un étudiant à un quiz
+const tentativeSchema = new mongoose.Schema({
+    // Relations : qui a répondu, et à quel quiz
+    etudiant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
+    // Une ligne par question : la réponse choisie et si elle est bonne
+    reponses: [{
+        question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
+        reponse: { type: mongoose.Schema.Types.ObjectId, ref: 'Reponse', required: true },
+        estBonne: { type: Boolean, default: false }
+    }],
+    score: { type: Number, default: 0 },
+    total: { type: Number, default: 0 }
+}, { timestamps: true });
+
+const Tentative = mongoose.model('Tentative', tentativeSchema, 'tentatives');
+
+
+
+
+
+
+
 //Regles des reponses: QCM 2 a 5 reponses, V/F
 //Une seuke bonne reponses dans les deux cas
 //Message d'erreur ou null si tout est correct
@@ -74,4 +98,4 @@ function verifierReponses(type, reponses) {
 
     return null;
 }
-module.exports = { User, Quiz, Question, Reponse, verifierReponses };
+module.exports = { User, Quiz, Question, Reponse, Tentative, verifierReponses };
