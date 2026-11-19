@@ -370,6 +370,41 @@ app.get('/api/etudiant/quiz', verifierConnexion, verifierEtudiant, async (req, r
 
 
 
+// Un quiz publié avec ses questions, SANS les bonnes réponses
+app.get('/api/etudiant/quiz/:id', verifierConnexion, verifierEtudiant, async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+        // publie: true -> un brouillon répond 404, comme s'il n'existait pas
+        const quiz = await Quiz.findOne({ _id: req.params.id, publie: true })
+            .select('titre description theme difficulte');
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+
+        const questions = await Question.find({ quiz: quiz._id })
+            .select('texte type').sort({ createdAt: 1 }).lean();
+        // select('texte question') : le champ estBonne n'est PAS envoyé
+        const reponses = await Reponse.find({ question: { $in: questions.map(q => q._id) } })
+            .select('texte question').sort({ _id: 1 }).lean();
+
+        const resultat = questions.map(q => ({
+            ...q,
+            reponses: reponses
+                .filter(r => String(r.question) === String(q._id))
+                .map(r => ({ _id: r._id, texte: r.texte }))
+        }));
+
+        res.json({ quiz, questions: resultat });
+    } catch (err) {
+        console.error('Erreur quiz étudiant :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+
+
 
 
 
