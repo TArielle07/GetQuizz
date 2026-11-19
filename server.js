@@ -355,6 +355,20 @@ app.get('/api/etudiant', verifierConnexion, verifierEtudiant, (req, res) => {
 });
 
 
+// Liste des quiz PUBLIÉS seulement (les brouillons ne sortent jamais)
+app.get('/api/etudiant/quiz', verifierConnexion, verifierEtudiant, async (req, res) => {
+    try {
+        const quiz = await Quiz.find({ publie: true })
+            .select('titre description theme difficulte updatedAt')
+            .sort({ updatedAt: -1 });
+        res.json(quiz);
+    } catch (err) {
+        console.error('Erreur liste étudiant :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+
 
 
 
