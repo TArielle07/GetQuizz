@@ -403,6 +403,52 @@ app.get('/api/etudiant/quiz/:id', verifierConnexion, verifierEtudiant, async (re
     }
 });
 
+// Soumettre ses réponses : { reponses: [ { question: "<id>", reponse: "<id>" }, ... ] }
+app.post('/api/etudiant/quiz/:id/soumettre', verifierConnexion, verifierEtudiant, async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+        const quiz = await Quiz.findOne({ _id: req.params.id, publie: true });
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+
+        const questions = await Question.find({ quiz: quiz._id }).sort({ createdAt: 1 });
+        const reponsesQuiz = await Reponse.find({ question: { $in: questions.map(q => q._id) } });
+        const envoyees = Array.isArray(req.body.reponses) ? req.body.reponses : [];
+
+        // Vérifier que CHAQUE question a reçu une réponse valide
+        const lignes = [];
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const choix = envoyees.find(r => String(r.question) === String(q._id));
+            // La réponse choisie doit exister ET appartenir à cette question
+            const reponse = choix && reponsesQuiz.find(r =>
+                String(r._id) === String(choix.reponse) && String(r.question) === String(q._id));
+
+            if (!reponse) {
+                return res.status(400).json({ message: `Question ${i + 1} : choisissez une réponse.` });
+            }
+            lignes.push({ question: q._id, reponse: reponse._id, estBonne: reponse.estBonne });
+        }
+
+        const score = lignes.filter(l => l.estBonne).length;
+        const tentative = await Tentative.create({
+            etudiant: req.session.utilisateur.id,
+            quiz: quiz._id,
+            reponses: lignes,
+            score,
+            total: questions.length
+        });
+
+        res.status(201).json({ message: 'Réponses envoyées.', tentativeId: tentative._id, score, total: questions.length });
+    } catch (err) {
+        console.error('Erreur soumission :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
 
 
 
