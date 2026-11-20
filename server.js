@@ -2,9 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
-
+//const { User } = require('./models');
 const { User, Quiz, Question, Reponse, Tentative, verifierReponses } = require('./models');
-
 require('dotenv').config();
 
 const app = express();
@@ -110,152 +109,6 @@ function verifierEnseignant(req, res, next) {
     next();
 }
 
-/* =========================================================
-   API DES QUIZ — Création d'un quiz
-   ========================================================= */
-
-app.post('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) => {
-    try {
-        const { titre, description } = req.body;
-
-        // Vérifier que le titre est rempli
-        if (!titre || !titre.trim()) {
-            return res.status(400).json({
-                message: 'Le titre du quiz est obligatoire.'
-            });
-        }
-
-        // Créer le quiz dans la base de données
-        const nouveauQuiz = new Quiz({
-            titre: titre.trim(),
-            description: description || '',
-            enseignant: req.session.utilisateur.id
-        });
-
-        await nouveauQuiz.save();
-
-        res.status(201).json({
-            message: 'Quiz créé avec succès.',
-            quiz: nouveauQuiz
-        });
-
-    } catch (err) {
-        console.error('Erreur lors de la création du quiz :', err.message);
-
-        res.status(500).json({
-            message: 'Erreur du serveur lors de la création du quiz.'
-        });
-    }
-});
-
-/* =========================================================
-   API DES QUESTIONS ET DES REPONSES
-   ========================================================= */
-
-app.post(
-    '/api/quiz/:quizId/questions',
-    verifierConnexion,
-    verifierEnseignant,
-    async (req, res) => {
-        let nouvelleQuestion;
-
-        try {
-            const { texte, type, reponses } = req.body;
-            const { quizId } = req.params;
-
-            // Vérifier l'identifiant du quiz
-            if (!mongoose.Types.ObjectId.isValid(quizId)) {
-                return res.status(400).json({
-                    message: 'Identifiant du quiz invalide.'
-                });
-            }
-
-            // Vérifier les informations de la question
-            if (!texte || !texte.trim()) {
-                return res.status(400).json({
-                    message: 'Le texte de la question est obligatoire.'
-                });
-            }
-
-            if (!['qcm', 'vrai_faux'].includes(type)) {
-                return res.status(400).json({
-                    message: 'Le type doit être qcm ou vrai_faux.'
-                });
-            }
-
-            if (!Array.isArray(reponses) ||
-                reponses.some(r => !r.texte || !r.texte.trim())) {
-                return res.status(400).json({
-                    message: 'Chaque réponse doit avoir un texte.'
-                });
-            }
-
-            // Vérifier que le quiz appartient à cet enseignant
-            const quiz = await Quiz.findOne({
-                _id: quizId,
-                enseignant: req.session.utilisateur.id
-            });
-
-            if (!quiz) {
-                return res.status(404).json({
-                    message: 'Quiz introuvable ou accès refusé.'
-                });
-            }
-
-            // Vérifier les règles des réponses
-            const erreur = verifierReponses(type, reponses);
-
-            if (erreur) {
-                return res.status(400).json({
-                    message: erreur
-                });
-            }
-
-            // Enregistrer la question
-            nouvelleQuestion = new Question({
-                quiz: quiz._id,
-                texte: texte.trim(),
-                type: type
-            });
-
-            await nouvelleQuestion.save();
-
-            // Associer les réponses à la question
-            const nouvellesReponses = reponses.map(r => ({
-                question: nouvelleQuestion._id,
-                texte: r.texte.trim(),
-                estBonne: r.estBonne === true
-            }));
-
-            await Reponse.insertMany(nouvellesReponses);
-
-            // Confirmer l'enregistrement
-            res.status(201).json({
-                message: 'Question et réponses enregistrées.',
-                question: nouvelleQuestion,
-                reponses: nouvellesReponses
-            });
-
-        } catch (err) {
-            // Éviter de garder une question sans ses réponses
-            if (nouvelleQuestion) {
-                await Question.deleteOne({
-                    _id: nouvelleQuestion._id
-                }).catch(() => {});
-            }
-
-            console.error(
-                'Erreur lors de l’enregistrement de la question :',
-                err.message
-            );
-
-            res.status(500).json({
-                message: 'Erreur du serveur lors de l’enregistrement.'
-            });
-        }
-    }
-);
-
 // Exemple de route protégée 
 app.get('/api/moi', verifierConnexion, (req, res) => {
         res.json({
@@ -323,43 +176,161 @@ app.post('/api/logout', (req, res) => {
 });
 
 
+// ===== QUIZ =====
+// Valeurs du formulaire -> valeurs de la base de données
+const TYPES = { choix: 'qcm', vf: 'vrai_faux' };
+
+// Créer un quiz (brouillon ou publié) avec ses questions et ses réponses
+app.post('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        const { titre, description, theme, difficulte, statut } = req.body;
+        const questions = Array.isArray(req.body.questions) ? req.body.questions : [];
+        const publier = statut === 'publie';
+
+        // Règles pour tous les quiz
+        if (!titre || titre.trim() === '') {
+            return res.status(400).json({ message: 'Le titre du quiz est obligatoire.' });
+        }
+        //if (questions.length > 5) {
+        //    return res.status(400).json({ message: 'Un quiz peut avoir au maximum 5 questions.' });
+       // }
+
+        // Règles en plus pour publier
+        if (publier) {
+            if (!description || !theme || !difficulte) {
+                return res.status(400).json({ message: 'Pour publier, remplissez tous les champs.' });
+            }
+            if (questions.length === 0) {
+                return res.status(400).json({ message: 'Un quiz publié doit avoir au moins une question.' });
+            }
+        }
+
+        // 1. Vérifier toutes les questions AVANT d'enregistrer quoi que ce soit
+        const questionsValides = [];
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const prefixe = `Question ${i + 1} : `;
+            const type = TYPES[q.type];
+            const texte = (q.texte || '').trim();
+
+            if (!texte) {
+                return res.status(400).json({ message: prefixe + "l'intitulé est obligatoire." });
+            }
+            if (!type) {
+                return res.status(400).json({ message: prefixe + 'type de question invalide.' });
+            }
+
+            // On garde les réponses remplies ; "correcte" (front) devient "estBonne" (base)
+            const reponses = (Array.isArray(q.reponses) ? q.reponses : [])
+                .filter(r => r.texte && r.texte.trim() !== '')
+                .map(r => ({ texte: r.texte.trim(), estBonne: r.correcte === true }));
+
+            // Les règles QCM / Vrai-Faux s'appliquent quand on publie
+            if (publier) {
+                const erreur = verifierReponses(type, reponses);
+                if (erreur) {
+                    return res.status(400).json({ message: prefixe + erreur });
+                }
+            }
+
+            questionsValides.push({ texte, type, reponses });
+        }
+
+        // 2. Enregistrer le quiz, relié à l'enseignant de la session
+        const quiz = await Quiz.create({
+            titre: titre.trim(),
+            description: description ? description.trim() : '',
+            theme: theme ? theme.trim() : '',
+            difficulte: difficulte || undefined,
+            publie: publier,
+            enseignant: req.session.utilisateur.id
+        });
+
+        // 3. Enregistrer chaque question, puis ses réponses
+        for (const q of questionsValides) {
+            const question = await Question.create({ quiz: quiz._id, texte: q.texte, type: q.type });
+            if (q.reponses.length > 0) {
+                await Reponse.create(q.reponses.map(r => ({ ...r, question: question._id })));
+            }
+        }
+
+        res.status(201).json({ message: 'Quiz enregistré.', quizId: quiz._id });
+
+    } catch (err) {
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ message: 'Les informations du quiz sont invalides.' });
+        }
+        console.error('Erreur création quiz :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+// Liste des quiz de l'enseignant connecté
+// /api/quiz?statut=publie -> Mes quiz   |   /api/quiz?statut=brouillon -> Brouillons
+app.get('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        const filtre = { enseignant: req.session.utilisateur.id };
+        if (req.query.statut === 'publie') filtre.publie = true;
+        if (req.query.statut === 'brouillon') filtre.publie = false;
+
+        const quiz = await Quiz.find(filtre).sort({ updatedAt: -1 });
+        res.json(quiz);
+    } catch (err) {
+        console.error('Erreur liste des quiz :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+
+// Un quiz avec ses questions et leurs réponses (pour terminer un brouillon)
+app.get('/api/quiz/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+        const quiz = await Quiz.findOne({ _id: req.params.id, enseignant: req.session.utilisateur.id });
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+
+        const questions = await Question.find({ quiz: quiz._id }).sort({ createdAt: 1 }).lean();
+        const reponses = await Reponse.find({ question: { $in: questions.map(q => q._id) } }).lean();
+
+        // On range chaque réponse sous sa question
+        const resultat = questions.map(q => ({
+            ...q,
+            reponses: reponses.filter(r => String(r.question) === String(q._id))
+        }));
+
+        res.json({ quiz, questions: resultat });
+    } catch (err) {
+        console.error('Erreur affichage quiz :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
 
 
 // ===== MODIFIER / SUPPRIMER / PUBLIER (enseignant) =====
-
-// Retrouve une question seulement si son quiz appartient à l'enseignant connecté
+// Retrouve une question SEULEMENT si son quiz appartient à l'enseignant connecté
 async function trouverQuestionDeLEnseignant(idQuestion, idEnseignant) {
     if (!mongoose.isValidObjectId(idQuestion)) return null;
-
     const question = await Question.findById(idQuestion);
     if (!question) return null;
-
-    const quiz = await Quiz.findOne({
-        _id: question.quiz,
-        enseignant: idEnseignant
-    });
-
+    const quiz = await Quiz.findOne({ _id: question.quiz, enseignant: idEnseignant });
     if (!quiz) return null;
-
     return { question, quiz };
 }
 
-// Publier un brouillon
+// Publier un brouillon (seulement s'il est complet)
 app.put('/api/quiz/:id/publier', verifierConnexion, verifierEnseignant, async (req, res) => {
     try {
         if (!mongoose.isValidObjectId(req.params.id)) {
             return res.status(404).json({ message: 'Quiz introuvable.' });
         }
-
-        const quiz = await Quiz.findOne({
-            _id: req.params.id,
-            enseignant: req.session.utilisateur.id
-        });
-
+        const quiz = await Quiz.findOne({ _id: req.params.id, enseignant: req.session.utilisateur.id });
         if (!quiz) {
             return res.status(404).json({ message: 'Quiz introuvable.' });
         }
-
         if (!quiz.description || !quiz.theme || !quiz.difficulte) {
             return res.status(400).json({
                 message: 'Pour publier, remplissez la description, le thème et la difficulté.'
@@ -367,29 +338,22 @@ app.put('/api/quiz/:id/publier', verifierConnexion, verifierEnseignant, async (r
         }
 
         const questions = await Question.find({ quiz: quiz._id }).sort({ createdAt: 1 });
-
         if (questions.length === 0) {
-            return res.status(400).json({
-                message: 'Un quiz publié doit avoir au moins une question.'
-            });
+            return res.status(400).json({ message: 'Un quiz publié doit avoir au moins une question.' });
         }
 
+        // Chaque question doit respecter les règles QCM / Vrai-Faux
         for (let i = 0; i < questions.length; i++) {
             const reponses = await Reponse.find({ question: questions[i]._id });
             const erreur = verifierReponses(questions[i].type, reponses);
-
             if (erreur) {
-                return res.status(400).json({
-                    message: `Question ${i + 1} : ${erreur}`
-                });
+                return res.status(400).json({ message: `Question ${i + 1} : ${erreur}` });
             }
         }
 
         quiz.publie = true;
         await quiz.save();
-
         res.json({ message: 'Quiz publié.' });
-
     } catch (err) {
         console.error('Erreur publication :', err.message);
         res.status(500).json({ message: 'Erreur du serveur.' });
@@ -397,38 +361,29 @@ app.put('/api/quiz/:id/publier', verifierConnexion, verifierEnseignant, async (r
 });
 
 // Modifier une question et ses réponses
+// Même format que la création : { texte, type: "choix"|"vf", reponses: [ { texte, correcte } ] }
 app.put('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
     try {
-        const trouve = await trouverQuestionDeLEnseignant(
-            req.params.id,
-            req.session.utilisateur.id
-        );
-
+        const trouve = await trouverQuestionDeLEnseignant(req.params.id, req.session.utilisateur.id);
         if (!trouve) {
             return res.status(404).json({ message: 'Question introuvable.' });
         }
-
         const { question, quiz } = trouve;
+
         const texte = (req.body.texte || '').trim();
-
-        const TYPES = { choix: 'qcm', vf: 'vrai_faux' };
         const type = TYPES[req.body.type];
-
         if (!texte) {
             return res.status(400).json({ message: "L'intitulé est obligatoire." });
         }
-
         if (!type) {
             return res.status(400).json({ message: 'Type de question invalide.' });
         }
 
         const reponses = (Array.isArray(req.body.reponses) ? req.body.reponses : [])
             .filter(r => r.texte && r.texte.trim() !== '')
-            .map(r => ({
-                texte: r.texte.trim(),
-                estBonne: r.correcte === true
-            }));
+            .map(r => ({ texte: r.texte.trim(), estBonne: r.correcte === true }));
 
+        // Même règle qu'à la création : un quiz publié doit rester valide
         if (quiz.publie) {
             const erreur = verifierReponses(type, reponses);
             if (erreur) {
@@ -440,16 +395,13 @@ app.put('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req,
         question.type = type;
         await question.save();
 
+        // On remplace les anciennes réponses par les nouvelles
         await Reponse.deleteMany({ question: question._id });
-
         if (reponses.length > 0) {
-            await Reponse.create(
-                reponses.map(r => ({ ...r, question: question._id }))
-            );
+            await Reponse.insertMany(reponses.map(r => ({ ...r, question: question._id })));
         }
 
         res.json({ message: 'Question modifiée.' });
-
     } catch (err) {
         console.error('Erreur modification question :', err.message);
         res.status(500).json({ message: 'Erreur du serveur.' });
@@ -459,37 +411,57 @@ app.put('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req,
 // Supprimer une question et ses réponses
 app.delete('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
     try {
-        const trouve = await trouverQuestionDeLEnseignant(
-            req.params.id,
-            req.session.utilisateur.id
-        );
-
+        const trouve = await trouverQuestionDeLEnseignant(req.params.id, req.session.utilisateur.id);
         if (!trouve) {
             return res.status(404).json({ message: 'Question introuvable.' });
         }
-
         const { question, quiz } = trouve;
 
+        // Un quiz publié ne peut pas se retrouver sans question
         if (quiz.publie) {
             const nb = await Question.countDocuments({ quiz: quiz._id });
-
             if (nb <= 1) {
-                return res.status(400).json({
-                    message: 'Un quiz publié doit garder au moins une question.'
-                });
+                return res.status(400).json({ message: 'Un quiz publié doit garder au moins une question.' });
             }
         }
 
         await Reponse.deleteMany({ question: question._id });
         await question.deleteOne();
-
         res.json({ message: 'Question supprimée.' });
-
     } catch (err) {
         console.error('Erreur suppression question :', err.message);
         res.status(500).json({ message: 'Erreur du serveur.' });
     }
 });
+
+// ===== MOT DE PASSE =====
+app.put('/api/mot-de-passe', verifierConnexion, async (req, res) => {
+    try {
+        const { ancien, nouveau } = req.body;
+
+        if (!ancien || !nouveau) {
+            return res.status(400).json({ message: 'Veuillez remplir tous les champs.' });
+        }
+        if (nouveau.length < 8) {
+            return res.status(400).json({ message: 'Minimum 8 caractères.' });
+        }
+
+        const utilisateur = await User.findById(req.session.utilisateur.id);
+        if (!utilisateur || !(await bcrypt.compare(ancien, utilisateur.mot_de_passe))) {
+            return res.status(401).json({ message: 'Ancien mot de passe incorrect.' });
+        }
+
+        utilisateur.mot_de_passe = nouveau;
+        await utilisateur.save(); // le pre('save') de models.js hache le mot de passe
+
+        res.json({ message: 'Mot de passe modifié.' });
+    } catch (err) {
+        console.error('Erreur mot de passe :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
+
 
 
 // ===== ÉTUDIANT =====
