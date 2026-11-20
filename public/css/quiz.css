@@ -1,0 +1,185 @@
+/* =========================================================
+   SPRINT 3 : pages étudiant, gestion et modification d'un quiz
+   ========================================================= */
+
+/* L'attribut hidden doit toujours cacher l'élément, même s'il a un display (flex, inline-block...) */
+[hidden] {
+    display: none !important;
+}
+
+/* ---------- Statut Brouillon / Publié ---------- */
+.statut {
+    align-self: flex-start;
+    padding: 4px 12px;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.statut-brouillon { background-color: #ffffff; }
+.statut-publie    { background-color: #9EE2DB; }
+
+/* Le bouton d'une carte reste en bas, à gauche */
+.carte .bouton {
+    margin-top: auto;
+    align-self: flex-start;
+}
+
+/* ---------- Formulaire du quiz (étudiant) et de modification ---------- */
+.quiz-form {
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Une question = une carte blanche avec un contour */
+.quiz-question {
+    margin: 0;
+    padding: 24px;
+    background-color: #ffffff;
+    border: 2px solid #35484B;
+    border-radius: 14px;
+    box-shadow: 6px 6px 0 #9EE2DB;
+}
+
+.quiz-question legend,
+.quiz-question h2 {
+    margin: 0 0 12px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Une réponse = une ligne cliquable avec son bouton radio */
+.quiz-reponse {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 10px 14px;
+    border: 2px solid #d2f4f0;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.quiz-reponse:hover {
+    background-color: #f7fbfb;
+}
+
+/* La réponse cochée est mise en valeur */
+.quiz-reponse:has(input:checked) {
+    background-color: #d2f4f0;
+    border-color: #43A097;
+}
+
+.quiz-reponse input[type="radio"] {
+    accent-color: #43A097;
+    width: 18px;
+    height: 18px;
+}
+
+/* Question oubliée ou champ invalide */
+.quiz-question.erreur,
+.champ-q .erreur {
+    border-color: #C62828;
+    box-shadow: 6px 6px 0 #F8B9CA;
+}
+
+/* Message sous le formulaire (erreur en rouge, succès en vert) */
+.quiz-message {
+    margin: 0;
+    font-weight: 700;
+    color: #C62828;
+}
+
+.quiz-message.succes {
+    color: #43A097;
+}
+
+/* ---------- Page de gestion d'un quiz ---------- */
+.gq-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.gq-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 760px;
+}
+
+.gq-type {
+    margin: 0 0 8px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.gq-reponses {
+    margin: 0 0 16px;
+    padding-left: 20px;
+}
+
+.gq-bonne {
+    font-weight: 700;
+    color: #43A097;
+}
+
+/* ---------- Champs de la page de modification ---------- */
+.champ-q {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.champ-q label,
+.label-q {
+    margin: 0;
+    font-weight: 700;
+}
+
+.champ-q input[type="text"],
+.champ-q select {
+    padding: 12px 14px;
+    border: 2px solid #35484B;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+    color: #35484B;
+    background-color: #ffffff;
+}
+
+/* Ligne de réponse : bouton radio + champ texte */
+.mq-ligne {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mq-ligne input[type="text"] {
+    flex: 1;
+}
+
+/* ---------- Page de confirmation ---------- */
+.confirmation {
+    max-width: 560px;
+    align-items: center;
+    text-align: center;
+    cursor: default;
+}
+
+.confirmation:hover,
+.confirmation:active {
+    transform: none;
+}
+
+.confirmation-score {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
