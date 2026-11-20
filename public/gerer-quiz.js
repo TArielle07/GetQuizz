@@ -13,6 +13,9 @@
     let elMessage = document.querySelector("#gq-message");
     let elListe = document.querySelector("#gq-questions");
 
+    // Bouton « Modifier le quiz » : ouvre le formulaire de création, déjà rempli
+    document.querySelector("#btn-modifier-infos").href = "creer-quiz.html?id=" + idQuiz;
+
     function afficherMessage(texte, succes) {
         elMessage.textContent = texte;
         elMessage.className = "quiz-message" + (succes ? " succes" : "");

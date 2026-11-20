@@ -265,6 +265,93 @@ app.post('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) =>
     }
 });
 
+// Modifier un quiz complet (terminer un brouillon) : même format que la création
+// Les anciennes questions et réponses sont remplacées par celles du formulaire
+app.put('/api/quiz/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+        const quiz = await Quiz.findOne({ _id: req.params.id, enseignant: req.session.utilisateur.id });
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz introuvable.' });
+        }
+
+        const { titre, description, theme, difficulte, statut } = req.body;
+        const questions = Array.isArray(req.body.questions) ? req.body.questions : [];
+        const publier = statut === 'publie';
+
+        if (!titre || titre.trim() === '') {
+            return res.status(400).json({ message: 'Le titre du quiz est obligatoire.' });
+        }
+        if (publier) {
+            if (!description || !theme || !difficulte) {
+                return res.status(400).json({ message: 'Pour publier, remplissez tous les champs.' });
+            }
+            if (questions.length === 0) {
+                return res.status(400).json({ message: 'Un quiz publié doit avoir au moins une question.' });
+            }
+        }
+
+        // 1. Vérifier toutes les questions AVANT de modifier quoi que ce soit
+        const questionsValides = [];
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const prefixe = `Question ${i + 1} : `;
+            const type = TYPES[q.type];
+            const texte = (q.texte || '').trim();
+
+            if (!texte) {
+                return res.status(400).json({ message: prefixe + "l'intitulé est obligatoire." });
+            }
+            if (!type) {
+                return res.status(400).json({ message: prefixe + 'type de question invalide.' });
+            }
+
+            const reponses = (Array.isArray(q.reponses) ? q.reponses : [])
+                .filter(r => r.texte && r.texte.trim() !== '')
+                .map(r => ({ texte: r.texte.trim(), estBonne: r.correcte === true }));
+
+            if (publier) {
+                const erreur = verifierReponses(type, reponses);
+                if (erreur) {
+                    return res.status(400).json({ message: prefixe + erreur });
+                }
+            }
+            questionsValides.push({ texte, type, reponses });
+        }
+
+        // 2. Mettre à jour les informations du quiz
+        quiz.titre = titre.trim();
+        quiz.description = description ? description.trim() : '';
+        quiz.theme = theme ? theme.trim() : '';
+        quiz.difficulte = difficulte || undefined;
+        quiz.publie = publier;
+        await quiz.save();
+
+        // 3. Remplacer les anciennes questions et réponses
+        const anciennes = await Question.find({ quiz: quiz._id });
+        await Reponse.deleteMany({ question: { $in: anciennes.map(q => q._id) } });
+        await Question.deleteMany({ quiz: quiz._id });
+
+        for (const q of questionsValides) {
+            const question = await Question.create({ quiz: quiz._id, texte: q.texte, type: q.type });
+            if (q.reponses.length > 0) {
+                await Reponse.insertMany(q.reponses.map(r => ({ ...r, question: question._id })));
+            }
+        }
+
+        res.json({ message: 'Quiz modifié.', quizId: quiz._id });
+
+    } catch (err) {
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ message: 'Les informations du quiz sont invalides.' });
+        }
+        console.error('Erreur modification quiz :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
 // Liste des quiz de l'enseignant connecté
 // /api/quiz?statut=publie -> Mes quiz   |   /api/quiz?statut=brouillon -> Brouillons
 app.get('/api/quiz', verifierConnexion, verifierEnseignant, async (req, res) => {
