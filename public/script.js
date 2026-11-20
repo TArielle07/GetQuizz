@@ -569,7 +569,7 @@ if (elListeBrouillons) {
 async function afficherListeQuiz(statut, elListe, elVide) {
     try {
         let reponse = await fetch(API_URL + "/quiz?statut=" + statut);
-        if (!reponse.ok) throw new Error();
+        if (!reponse.ok) throw new Error("Statut " + reponse.status);
         let listeQuiz = await reponse.json();
 
         if (listeQuiz.length === 0) return;
