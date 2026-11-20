@@ -396,6 +396,66 @@ app.put('/api/quiz/:id/publier', verifierConnexion, verifierEnseignant, async (r
     }
 });
 
+// Modifier une question et ses réponses
+app.put('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        const trouve = await trouverQuestionDeLEnseignant(
+            req.params.id,
+            req.session.utilisateur.id
+        );
+
+        if (!trouve) {
+            return res.status(404).json({ message: 'Question introuvable.' });
+        }
+
+        const { question, quiz } = trouve;
+        const texte = (req.body.texte || '').trim();
+
+        const TYPES = { choix: 'qcm', vf: 'vrai_faux' };
+        const type = TYPES[req.body.type];
+
+        if (!texte) {
+            return res.status(400).json({ message: "L'intitulé est obligatoire." });
+        }
+
+        if (!type) {
+            return res.status(400).json({ message: 'Type de question invalide.' });
+        }
+
+        const reponses = (Array.isArray(req.body.reponses) ? req.body.reponses : [])
+            .filter(r => r.texte && r.texte.trim() !== '')
+            .map(r => ({
+                texte: r.texte.trim(),
+                estBonne: r.correcte === true
+            }));
+
+        if (quiz.publie) {
+            const erreur = verifierReponses(type, reponses);
+            if (erreur) {
+                return res.status(400).json({ message: erreur });
+            }
+        }
+
+        question.texte = texte;
+        question.type = type;
+        await question.save();
+
+        await Reponse.deleteMany({ question: question._id });
+
+        if (reponses.length > 0) {
+            await Reponse.create(
+                reponses.map(r => ({ ...r, question: question._id }))
+            );
+        }
+
+        res.json({ message: 'Question modifiée.' });
+
+    } catch (err) {
+        console.error('Erreur modification question :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
 
 // ===== ÉTUDIANT =====
 // Vérifier que l'utilisateur connecté est un étudiant
