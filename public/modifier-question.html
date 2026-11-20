@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier une question</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mes-quiz.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+    <div class="page">
+
+        <!--Header en haut-->
+        <header class="header">
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur"></span>
+            </div>
+
+            <a href="enseignant.html" class="header-logo">
+                <img src="GetQuiz_logo.png" alt="GetQuiz">
+            </a>
+
+            <a href="connexion.html" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+        <main class="main-container">
+            <a class="lien-retour" href="enseignant.html" id="mq-retour">← Retour au quiz</a>
+            <h1 class="titre-page">Modifier la question</h1>
+
+            <form id="form-question" class="quiz-form quiz-question" novalidate>
+                <div class="champ-q">
+                    <label for="mq-type">Type de question</label>
+                    <select id="mq-type">
+                        <option value="choix">Choix multiples</option>
+                        <option value="vf">Vrai / Faux</option>
+                    </select>
+                </div>
+
+                <div class="champ-q">
+                    <label for="mq-texte">Intitulé de la question</label>
+                    <input type="text" id="mq-texte">
+                </div>
+
+                <!--Choix multiples : 5 lignes (radio = bonne réponse), remplies par modifier-question.js-->
+                <div class="champ-q" id="mq-bloc-choix">
+                    <p class="label-q">Réponses (2 à 5, cochez la bonne réponse)</p>
+                    <div class="champ-q" id="mq-reponses"></div>
+                </div>
+
+                <!--Vrai / Faux : caché tant que le type n'est pas "vf"-->
+                <div class="champ-q" id="mq-bloc-vf" hidden>
+                    <p class="label-q">Bonne réponse</p>
+                    <label class="quiz-reponse"><input type="radio" name="mq-vf" value="vrai"> Vrai</label>
+                    <label class="quiz-reponse"><input type="radio" name="mq-vf" value="faux"> Faux</label>
+                </div>
+
+                <p class="quiz-message" id="mq-message" aria-live="polite"></p>
+
+                <div class="gq-actions">
+                    <button type="submit" class="bouton bouton-turquoise">Enregistrer</button>
+                    <button type="button" class="bouton" id="mq-supprimer">Supprimer la question</button>
+                </div>
+            </form>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="modifier-question.js"></script>
+</body>
+</html>

@@ -9,18 +9,15 @@ let elNom = document.querySelector("#nom");
 let elMotDePasse = document.querySelector("#password");
 let elMessageErreur = document.querySelector("#messageErreur");
 
-// On vérifie que le formulaire existe (il est seulement dans connexion.html)
 if (elFormConnexion) {
     elFormConnexion.addEventListener("submit", async (e) => {
         e.preventDefault();
         let ok = true;
 
-        // On efface les anciennes erreurs
         elMessageErreur.textContent = "";
         elNom.classList.remove("erreur");
         elMotDePasse.classList.remove("erreur");
 
-        // Validation des champs
         if (elNom.value.trim().length === 0) {
             elMessageErreur.textContent = "Veuillez entrer votre nom";
             elNom.classList.add("erreur");
@@ -48,10 +45,8 @@ if (elFormConnexion) {
                 if (!reponse.ok) throw new Error();
 
                 let utilisateur = await reponse.json();
-                                // On garde le nom pour l'afficher sur les autres pages
                 sessionStorage.setItem("nomUtilisateur", utilisateur.nom);
 
-                // Redirection selon le rôle
                 if (utilisateur.role === "enseignant") {
                     window.location.href = "enseignant.html";
                 } else {
@@ -64,7 +59,6 @@ if (elFormConnexion) {
     });
 }
 
-// Afficher / cacher le mot de passe (icône de l'œil dans connexion.html)
 function togglePassword(idChamp, icone) {
     let elChamp = document.getElementById(idChamp);
 
@@ -78,19 +72,16 @@ function togglePassword(idChamp, icone) {
 }
 
 /* =========================================================
-   PARTIE COMMUNE AUX PAGES ENSEIGNANT
-   (enseignant.html et creer-quiz.html) — Front 2
+   PARTIE COMMUNE AUX PAGES ENSEIGNANT ET ÉTUDIANT
+   (nom affiché, protection de la page, déconnexion)
    ========================================================= */
 
-//let elNomUtilisateur = document.querySelector("#nomUtilisateur");
 let elsNomUtilisateur = document.querySelectorAll(".nom-utilisateur");
+let roleDeLaPage = document.body.dataset.role === "etudiant" ? "etudiant" : "enseignant";
 
-// Afficher le nom de la personne connectée
-// Si personne n'est connecté, retour à la page de connexion
-// Afficher le nom de la personne connectée (profil + "Bonjour ...")
 if (elsNomUtilisateur.length > 0) {
-    // On demande au serveur qui est vraiment connecté
-    fetch(API_URL + "/enseignant")
+    let routeNom = roleDeLaPage === "etudiant" ? "/etudiant" : "/enseignant";
+    fetch(API_URL + routeNom)
         .then(reponse => {
             if (!reponse.ok) throw new Error();
             return reponse.json();
@@ -99,33 +90,26 @@ if (elsNomUtilisateur.length > 0) {
             elsNomUtilisateur.forEach(el => el.textContent = utilisateur.nom);
         })
         .catch(() => {
-            // Session fermée ou serveur relancé : retour à la connexion
             sessionStorage.removeItem("nomUtilisateur");
             window.location.href = "connexion.html";
         });
 }
 
-
-// Déconnexion : fermer la session avant de quitter la page
 let elBtnDeconnexion = document.querySelector(".btn-deconnexion");
 
 if (elBtnDeconnexion) {
     elBtnDeconnexion.addEventListener("click", async (e) => {
         e.preventDefault();
         await fetch(API_URL + "/logout", { method: "POST" });
-                sessionStorage.removeItem("nomUtilisateur");
+        sessionStorage.removeItem("nomUtilisateur");
         window.location.href = "connexion.html";
     });
 }
 
 /* =========================================================
    PAGE CRÉER UN QUIZ (creer-quiz.html) — Sprint 2
-   US02 : créer un quiz (titre + description)
-   US03 : ajouter une question
-   US04 : définir les réponses possibles et la bonne réponse
    ========================================================= */
 
-//const MAX_QUESTIONS = 5;
 const MAX_REPONSES = 5;
 
 let elFormQuiz = document.querySelector("#form-quiz");
@@ -138,35 +122,40 @@ let elModeleQuestion = document.querySelector("#modele-question");
 let elBtnAjouterQuestion = document.querySelector("#btn-ajouter-question");
 let elMessageQuiz = document.querySelector("#message-quiz");
 
-// Aperçu (colonne de droite)
 let elApercuTitre = document.querySelector("#apercu-titre-quiz");
 let elApercuCompteur = document.querySelector("#apercu-compteur");
-let elApercuProgression = document.querySelector("#apercu-progression");
-let elApercuRemplie = document.querySelector("#apercu-progression-remplie");
 let elApercuVide = document.querySelector("#apercu-vide");
 let elApercuListe = document.querySelector("#apercu-liste");
 let elModeleApercu = document.querySelector("#modele-apercu-item");
 
-// Sert à donner un id unique à chaque question (q1, q2, q3...)
 let compteurQuestions = 0;
+let idQuizModifie = null;
 
-// On vérifie que le formulaire existe (il est seulement dans creer-quiz.html)
 if (elFormQuiz) {
-    ajouterQuestion(); // la question 1 apparaît au chargement
+    idQuizModifie = new URLSearchParams(window.location.search).get("id");
 
-    // Bouton "+ Ajouter une question"
+    if (idQuizModifie) {
+        chargerQuizPourModification(idQuizModifie);
+    } else {
+        ajouterQuestion();
+    }
+
     elBtnAjouterQuestion.addEventListener("click", () => {
         ajouterQuestion();
     });
 
-    // Un seul écouteur pour tous les boutons des questions
-    // (les questions sont ajoutées après le chargement, donc on écoute la liste)
     elListeQuestions.addEventListener("click", (e) => {
         let elQuestion = e.target.closest("[data-js='question']");
 
         if (e.target.dataset.js === "btn-supprimer-question") {
-            elQuestion.remove();
-            mettreAJourQuestions();
+            let numero = elQuestion.querySelector(".question-titre").textContent;
+            demanderConfirmation("Voulez-vous vraiment supprimer « " + numero + " » ? Cette action est irréversible.")
+                .then(confirme => {
+                    if (confirme) {
+                        elQuestion.remove();
+                        mettreAJourQuestions();
+                    }
+                });
         }
 
         if (e.target.dataset.js === "btn-ajouter-reponse") {
@@ -174,20 +163,16 @@ if (elFormQuiz) {
         }
     });
 
-    // L'aperçu se met à jour à chaque fois qu'on tape ou change quelque chose
     elFormQuiz.addEventListener("input", mettreAJourApercu);
     elFormQuiz.addEventListener("change", mettreAJourApercu);
 
-    // Le contour rouge disparaît dès qu'on corrige le champ
     elFormQuiz.addEventListener("input", (e) => {
         e.target.classList.remove("erreur");
     });
 
-    // Boutons Enregistrer et Publier
     elFormQuiz.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Quel bouton a été cliqué ? "brouillon" ou "publier"
         let action = e.submitter ? e.submitter.value : "brouillon";
 
         effacerErreurs();
@@ -211,9 +196,9 @@ if (elFormQuiz) {
         elBoutons.forEach(bouton => bouton.disabled = true);
 
         try {
-            // TODO : confirmer la route et les noms des champs avec Back
-            let reponse = await fetch(API_URL + "/quiz", {
-                method: "POST",
+            let url = idQuizModifie ? API_URL + "/quiz/" + idQuizModifie : API_URL + "/quiz";
+            let reponse = await fetch(url, {
+                method: idQuizModifie ? "PUT" : "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(quiz)
             });
@@ -225,11 +210,9 @@ if (elFormQuiz) {
                 afficherMessageQuiz("Le quiz a été enregistré.", "succes");
             }
 
-            // Retour au tableau de bord, où le quiz apparaît
             setTimeout(() => {
                 window.location.href = "enseignant.html";
             }, 1500);
-
         } catch (error) {
             afficherMessageQuiz("Une erreur est survenue lors de l'enregistrement", "erreur");
             elBoutons.forEach(bouton => bouton.disabled = false);
@@ -237,27 +220,103 @@ if (elFormQuiz) {
     });
 }
 
-// Ajoute une question à partir du modèle <template id="modele-question">
+async function chargerQuizPourModification(id) {
+    try {
+        let reponse = await fetch(API_URL + "/quiz/" + id);
+        if (!reponse.ok) throw new Error();
+        let donnees = await reponse.json();
+        let quiz = donnees.quiz;
+
+        let elTitrePage = document.querySelector(".section-1 h2");
+        if (elTitrePage) elTitrePage.textContent = "Modifier le quiz";
+        document.title = "Modifier un quiz";
+
+        elTitreQuiz.value = quiz.titre || "";
+        elDescriptionQuiz.value = quiz.description || "";
+        elThemeQuiz.value = quiz.theme || "";
+        elDifficulte.value = quiz.difficulte || "";
+
+        donnees.questions.forEach(question => {
+            ajouterQuestion();
+            let elQuestions = elListeQuestions.querySelectorAll("[data-js='question']");
+            remplirQuestion(elQuestions[elQuestions.length - 1], question);
+        });
+
+        if (donnees.questions.length === 0) ajouterQuestion();
+
+        mettreAJourApercu();
+    } catch (error) {
+        ajouterQuestion();
+        afficherMessageQuiz("Impossible de charger ce quiz", "erreur");
+    }
+}
+
+function remplirQuestion(elQuestion, question) {
+    let estVF = question.type === "vrai_faux";
+    elQuestion.querySelector("[data-js='type']").value = estVF ? "vf" : "choix";
+    elQuestion.querySelector("[data-js='texte']").value = question.texte;
+
+    if (estVF) {
+        let bonne = question.reponses.find(r => r.estBonne);
+        if (bonne) {
+            let valeur = bonne.texte.toLowerCase() === "vrai" ? "vrai" : "faux";
+            elQuestion.querySelector(".bloc-vf input[value='" + valeur + "']").checked = true;
+        }
+        return;
+    }
+
+    while (elQuestion.querySelectorAll(".reponse").length < Math.min(question.reponses.length, MAX_REPONSES)) {
+        ajouterReponse(elQuestion);
+    }
+    let elReponses = elQuestion.querySelectorAll(".reponse");
+    question.reponses.slice(0, MAX_REPONSES).forEach((reponse, i) => {
+        elReponses[i].querySelector("input[type='text']").value = reponse.texte;
+        elReponses[i].querySelector("input[type='radio']").checked = reponse.estBonne;
+    });
+}
+
+function demanderConfirmation(message) {
+    let elDialogue = document.querySelector("#dialogue-confirmation");
+
+    if (!elDialogue) return Promise.resolve(window.confirm(message));
+
+    elDialogue.querySelector("#dialogue-message").textContent = message;
+
+    return new Promise(resolve => {
+        let elAnnuler = elDialogue.querySelector("#dialogue-annuler");
+        let elConfirmer = elDialogue.querySelector("#dialogue-confirmer");
+
+        function terminer(reponse) {
+            elAnnuler.removeEventListener("click", annuler);
+            elConfirmer.removeEventListener("click", confirmer);
+            elDialogue.removeEventListener("cancel", annuler);
+            elDialogue.close();
+            resolve(reponse);
+        }
+        function annuler() { terminer(false); }
+        function confirmer() { terminer(true); }
+
+        elAnnuler.addEventListener("click", annuler);
+        elConfirmer.addEventListener("click", confirmer);
+        elDialogue.addEventListener("cancel", annuler);
+
+        elDialogue.showModal();
+        elAnnuler.focus();
+    });
+}
+
 function ajouterQuestion() {
-    //let nbQuestions = elListeQuestions.querySelectorAll("[data-js='question']").length;
-    //if (nbQuestions >= MAX_QUESTIONS) return;
-
     compteurQuestions++;
-
-    // On remplace QID par q1, q2... pour que les id et les boutons radio soient uniques
     let html = elModeleQuestion.innerHTML.replaceAll("QID", "q" + compteurQuestions);
     elListeQuestions.insertAdjacentHTML("beforeend", html);
-
     mettreAJourQuestions();
 }
 
-// Ajoute une ligne de réponse (5 réponses au maximum)
 function ajouterReponse(elQuestion) {
     let elReponses = elQuestion.querySelector("[data-js='reponses']");
     let nbReponses = elReponses.querySelectorAll(".reponse").length;
     if (nbReponses >= MAX_REPONSES) return;
 
-    // Le nom des boutons radio est le même pour toute la question (ex. q1-bonne)
     let nomRadio = elReponses.querySelector("input[type='radio']").name;
     let numero = nbReponses + 1;
 
@@ -268,47 +327,38 @@ function ajouterReponse(elQuestion) {
         </div>
     `);
 
-    // On cache le bouton quand on arrive à 5 réponses
     if (numero >= MAX_REPONSES) {
         elQuestion.querySelector("[data-js='btn-ajouter-reponse']").hidden = true;
     }
 }
 
-// Renumérote les questions et active / désactive les boutons
 function mettreAJourQuestions() {
     let elQuestions = elListeQuestions.querySelectorAll("[data-js='question']");
 
     elQuestions.forEach((elQuestion, index) => {
         elQuestion.querySelector(".question-titre").textContent = "Question " + (index + 1);
-
-        // On ne peut pas supprimer la dernière question qui reste
         elQuestion.querySelector("[data-js='btn-supprimer-question']").disabled = elQuestions.length === 1;
     });
-
-    //elBtnAjouterQuestion.disabled = elQuestions.length >= MAX_QUESTIONS;
 
     mettreAJourApercu();
 }
 
-// Met à jour la colonne "Aperçu du quiz"
 function mettreAJourApercu() {
-    // Titre
     let titre = elTitreQuiz.value.trim();
     elApercuTitre.textContent = titre || "[Titre du quiz]";
 
-    // On garde seulement les questions qui ont un intitulé
     let elQuestions = elListeQuestions.querySelectorAll("[data-js='question']");
     let questionsRemplies = [];
 
     elQuestions.forEach(elQuestion => {
         let texte = elQuestion.querySelector("[data-js='texte']").value.trim();
         let type = elQuestion.querySelector("[data-js='type']").value;
+        let bonneReponse = trouverBonneReponse(elQuestion, type);
         if (texte.length > 0) {
-            questionsRemplies.push({ texte, type });
+            questionsRemplies.push({ texte, type, bonneReponse });
         }
     });
 
-    // Liste
     elApercuListe.innerHTML = "";
     questionsRemplies.forEach((question, index) => {
         let elItem = elModeleApercu.content.cloneNode(true);
@@ -316,31 +366,34 @@ function mettreAJourApercu() {
         elItem.querySelector(".apercu-question").textContent = question.texte;
         elItem.querySelector(".apercu-type").textContent =
             question.type === "vf" ? "Vrai / Faux" : "Choix multiples";
+
+        let elBonne = elItem.querySelector(".apercu-bonne");
+        if (question.bonneReponse) {
+            elBonne.textContent = "✓ Bonne réponse : " + question.bonneReponse;
+        } else {
+            elBonne.textContent = "Bonne réponse : pas encore choisie";
+            elBonne.classList.add("manquante");
+        }
         elApercuListe.appendChild(elItem);
     });
 
-    // Compteur et barre de progression
-    //let nb = questionsRemplies.length;
-    //elApercuCompteur.textContent = nb + " / " + MAX_QUESTIONS + " questions";
-    //elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
-    //elApercuProgression.setAttribute("aria-valuenow", nb);
-    //elApercuRemplie.style.width = (nb / MAX_QUESTIONS) * 100 + "%";
-    //elApercuProgression.setAttribute("aria-valuenow", nb);
-
-    // Message "Aucune question..."
-    //elApercuVide.hidden = nb > 0;
-
-
-    // Compteur : "1 question", "3 questions"...
     let nb = questionsRemplies.length;
     elApercuCompteur.textContent = nb + (nb > 1 ? " questions" : " question");
-
     elApercuVide.hidden = nb > 0;
 }
 
-// Vérifie le formulaire. Retourne le message de la première erreur, ou "" si tout est bon.
-// Brouillon : seulement le titre est obligatoire.
-// Publier : tout doit être rempli.
+function trouverBonneReponse(elQuestion, type) {
+    if (type === "vf") {
+        let coche = elQuestion.querySelector(".bloc-vf input[type='radio']:checked");
+        if (!coche) return "";
+        return coche.value === "vrai" ? "Vrai" : "Faux";
+    }
+
+    let coche = elQuestion.querySelector(".reponse input[type='radio']:checked");
+    if (!coche) return "";
+    return coche.nextElementSibling.value.trim();
+}
+
 function validerQuiz(action) {
     let erreur = "";
 
@@ -377,14 +430,12 @@ function validerQuiz(action) {
         }
 
         if (type === "vf") {
-            // Vrai / Faux : il faut cocher Vrai ou Faux
             let coche = elQuestion.querySelector(".bloc-vf input[type='radio']:checked");
             if (!coche) {
                 elQuestion.querySelector(".vf-options").classList.add("erreur");
                 erreur = erreur || "Question " + numero + " : choisissez Vrai ou Faux";
             }
         } else {
-            // Choix multiples : au moins 2 réponses, et la bonne réponse cochée doit être remplie
             let elChampsReponses = elQuestion.querySelectorAll(".reponse input[type='text']");
             let nbRemplies = 0;
             elChampsReponses.forEach(champ => {
@@ -409,7 +460,6 @@ function validerQuiz(action) {
     return erreur;
 }
 
-// Transforme les questions du formulaire en objets à envoyer au serveur
 function recupererQuestions() {
     let questions = [];
     let elQuestions = elListeQuestions.querySelectorAll("[data-js='question']");
@@ -419,7 +469,6 @@ function recupererQuestions() {
         let type = elQuestion.querySelector("[data-js='type']").value;
         let reponses = [];
 
-        // Une question vide (possible dans un brouillon) n'est pas envoyée
         if (texte.length === 0) return;
 
         if (type === "vf") {
@@ -432,7 +481,6 @@ function recupererQuestions() {
                 let elRadio = elReponse.querySelector("input[type='radio']");
                 let texteReponse = elReponse.querySelector("input[type='text']").value.trim();
 
-                // On ignore les réponses laissées vides
                 if (texteReponse.length > 0) {
                     reponses.push({ texte: texteReponse, correcte: elRadio.checked });
                 }
@@ -445,18 +493,15 @@ function recupererQuestions() {
     return questions;
 }
 
-// Enlève le contour rouge de tous les champs
 function effacerErreurs() {
     elMessageQuiz.textContent = "";
     document.querySelectorAll(".erreur").forEach(el => el.classList.remove("erreur"));
 }
 
-// Affiche un message sous les boutons Enregistrer / Publier
 function afficherMessageQuiz(texte, type) {
     elMessageQuiz.textContent = texte;
     elMessageQuiz.className = "message-quiz message-" + type;
 }
-
 
 /* =========================================================
    PAGE MOT DE PASSE (mot-de-passe.html)
@@ -475,7 +520,6 @@ if (elFormMotDePasse) {
 
         elMessage.style.color = "";
 
-        // Validation avant d'envoyer au serveur
         if (!ancien || !nouveau || !confirmation) {
             elMessage.textContent = "Veuillez remplir tous les champs";
             return;
@@ -497,7 +541,6 @@ if (elFormMotDePasse) {
             });
             let resultat = await reponse.json();
 
-            // On affiche le message du serveur (succès ou erreur)
             elMessage.textContent = resultat.message;
             if (reponse.ok) {
                 elMessage.style.color = "green";
@@ -508,16 +551,6 @@ if (elFormMotDePasse) {
         }
     });
 }
-
-
-
-
-
-
-
-
-// TODO : afficher la liste des quiz de l'enseignant (mes-quiz.html)
-
 
 /* =========================================================
    PAGES MES QUIZ (mes-quiz.html) ET BROUILLONS (brouillons.html)
@@ -533,23 +566,26 @@ if (elListeBrouillons) {
     afficherListeQuiz("brouillon", elListeBrouillons, document.querySelector("#draft-empty"));
 }
 
-// Demande au serveur les quiz (publiés ou brouillons) et crée une carte par quiz
 async function afficherListeQuiz(statut, elListe, elVide) {
     try {
         let reponse = await fetch(API_URL + "/quiz?statut=" + statut);
         if (!reponse.ok) throw new Error();
         let listeQuiz = await reponse.json();
 
-        // Aucun quiz : on laisse le message "Aucun ... pour le moment"
         if (listeQuiz.length === 0) return;
 
-        // Au moins un quiz : on cache le message et on montre la liste
         elVide.style.display = "none";
         elListe.hidden = false;
 
         listeQuiz.forEach(quiz => {
+            let estPublie = typeof quiz.publie === "boolean" ? quiz.publie : statut === "publie";
+
             let elCarte = document.createElement("article");
-            elCarte.className = "carte " + (statut === "publie" ? "carte-turquoise" : "carte-rose-clair");
+            elCarte.className = "carte " + (estPublie ? "carte-turquoise" : "carte-rose-clair");
+
+            let elStatut = document.createElement("span");
+            elStatut.className = "statut " + (estPublie ? "statut-publie" : "statut-brouillon");
+            elStatut.textContent = estPublie ? "Publié" : "Brouillon";
 
             let elTitre = document.createElement("h2");
             elTitre.textContent = quiz.titre;
@@ -558,21 +594,21 @@ async function afficherListeQuiz(statut, elListe, elVide) {
             elDescription.className = "carte-texte";
             elDescription.textContent = quiz.description || "Pas de description";
 
-            // Ex. "Maths · facile · 2026-10-29"
             let elDetails = document.createElement("p");
             elDetails.className = "carte-texte";
-            let date = new Date(quiz.updatedAt).toLocaleDateString("fr-CA");
+            let date = quiz.updatedAt ? new Date(quiz.updatedAt).toLocaleDateString("fr-CA") : "";
             elDetails.textContent = [quiz.theme, quiz.difficulte, date].filter(Boolean).join(" · ");
 
-            elCarte.append(elTitre, elDescription, elDetails);
+            let elModifier = document.createElement("a");
+            elModifier.className = "bouton bouton-blanc";
+            elModifier.href = "gerer-quiz.html?id=" + quiz._id;
+            elModifier.textContent = "Modifier";
+            elModifier.setAttribute("aria-label", "Modifier le quiz " + quiz.titre);
+
+            elCarte.append(elStatut, elTitre, elDescription, elDetails, elModifier);
             elListe.appendChild(elCarte);
         });
     } catch (error) {
         console.log("Impossible de charger les quiz :", error);
     }
 }
-/* =========================================================
-   PAGE ÉTUDIANT (etudiant.html) — Front 1
-   ========================================================= */
-
-// TODO : afficher la liste des quiz

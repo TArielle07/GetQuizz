@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gérer le quiz</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mes-quiz.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+    <div class="page">
+
+        <!--Header en haut-->
+        <header class="header">
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur"></span>
+            </div>
+
+            <a href="enseignant.html" class="header-logo">
+                <img src="GetQuiz_logo.png" alt="GetQuiz">
+            </a>
+
+            <a href="connexion.html" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+        <main class="main-container">
+            <a class="lien-retour" href="enseignant.html" id="gq-retour">← Retour</a>
+
+            <!--Titre, statut et détails : remplis par gerer-quiz.js-->
+            <h1 class="titre-page" id="gq-titre">Chargement du quiz…</h1>
+            <p class="sous-titre"><span class="statut" id="gq-statut"></span> <span id="gq-details"></span></p>
+
+            <!--Bouton Publier : visible seulement pour un brouillon-->
+            <div class="gq-actions">
+                <button type="button" class="bouton bouton-turquoise" id="btn-publier" hidden>Publier</button>
+            </div>
+
+            <p class="quiz-message" id="gq-message" aria-live="polite"></p>
+
+            <!--Une carte par question, avec Modifier et Supprimer-->
+            <section class="gq-liste" id="gq-questions"></section>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="gerer-quiz.js"></script>
+</body>
+</html>
