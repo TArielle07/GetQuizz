@@ -191,6 +191,17 @@
             <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
         </footer>
     </div>
+
+    <!--Fenêtre de confirmation avant une suppression-->
+    <dialog id="dialogue-confirmation" class="dialogue" aria-labelledby="dialogue-titre" aria-describedby="dialogue-message">
+        <h2 id="dialogue-titre" class="dialogue-titre">Confirmer la suppression</h2>
+        <p id="dialogue-message" class="dialogue-message">Voulez-vous vraiment supprimer cet élément ?</p>
+        <div class="dialogue-actions">
+            <button type="button" class="dialogue-annuler" id="dialogue-annuler">Annuler</button>
+            <button type="button" class="dialogue-confirmer" id="dialogue-confirmer">Supprimer</button>
+        </div>
+    </dialog>
+
     <script src="script.js"></script>
 </body>
 </html>
