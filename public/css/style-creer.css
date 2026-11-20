@@ -709,6 +709,65 @@ a:focus-visible {
     }
 }
 
+/* ---------- Fenêtre de confirmation (suppression) ---------- */
+.dialogue {
+    width: min(92vw, 420px);
+    padding: 28px 24px 22px;
+    background-color: #ffffff;
+    border: 2px solid #35484B;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0 #35484b;
+    font-family: inherit;
+    color: #35484B;
+}
+
+.dialogue::backdrop {
+    background-color: rgba(53, 72, 75, 0.55);
+}
+
+.dialogue-titre {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.dialogue-message {
+    margin: 0 0 22px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.dialogue-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.dialogue-actions button {
+    padding: 9px 20px;
+    border: 2px solid #35484B;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: #35484B;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #35484b;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dialogue-actions button:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #35484b;
+}
+
+.dialogue-actions button:focus-visible {
+    outline: 3px solid #35484B;
+    outline-offset: 3px;
+}
+
+.dialogue-annuler   { background-color: #ffffff; }
+.dialogue-confirmer { background-color: #F8B9CA; }
+
 @media (prefers-reduced-motion: reduce) {
     .btn-deconnexion,
     .btn-retour,
