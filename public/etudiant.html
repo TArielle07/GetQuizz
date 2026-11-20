@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace étudiant</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mes-quiz.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<!--data-role="etudiant" : script.js demande le nom à /api/etudiant-->
+<body data-role="etudiant">
+    <div class="page">
+
+        <!--Header en haut-->
+        <header class="header">
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur"></span>
+            </div>
+
+            <a href="etudiant.html" class="header-logo">
+                <img src="GetQuiz_logo.png" alt="GetQuiz">
+            </a>
+
+            <a href="connexion.html" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+        <main class="main-container">
+            <h1 class="titre-page">
+                Bonjour <span class="nom-utilisateur"></span>,
+                prêt à faire un <span class="mot-accent">quiz</span>&nbsp;!
+            </h1>
+            <p class="sous-titre">Choisissez un quiz publié par vos enseignants.</p>
+
+            <!--Liste des quiz publiés : remplie par etudiant.js-->
+            <section class="cartes" id="etu-quiz-list" hidden></section>
+
+            <!--État vide : caché dès qu'il y a au moins un quiz-->
+            <section class="carte carte-turquoise-clair etat-vide" id="etu-quiz-empty">
+                <div class="etat-vide-icone">&#128221;</div>
+                <h2>Aucun quiz disponible</h2>
+                <p class="carte-texte">Revenez plus tard : les quiz publiés apparaîtront ici.</p>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="etudiant.js"></script>
+</body>
+</html>
