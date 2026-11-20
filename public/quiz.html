@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Répondre au quiz</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mes-quiz.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body data-role="etudiant">
+    <div class="page">
+
+        <!--Header en haut-->
+        <header class="header">
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur"></span>
+            </div>
+
+            <a href="etudiant.html" class="header-logo">
+                <img src="GetQuiz_logo.png" alt="GetQuiz">
+            </a>
+
+            <a href="connexion.html" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+        <main class="main-container">
+            <a class="lien-retour" href="etudiant.html">← Retour aux quiz</a>
+
+            <!--Titre et description : remplis par quiz.js-->
+            <h1 class="titre-page" id="quiz-titre">Chargement du quiz…</h1>
+            <p class="sous-titre" id="quiz-description"></p>
+
+            <form id="form-reponses" class="quiz-form" novalidate>
+                <!--Les questions et leurs boutons radio sont ajoutés ici par quiz.js-->
+                <div id="quiz-questions" class="quiz-form"></div>
+
+                <p class="quiz-message" id="quiz-message" aria-live="polite"></p>
+
+                <button type="submit" class="bouton bouton-turquoise" id="btn-soumettre">Soumettre</button>
+            </form>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>
