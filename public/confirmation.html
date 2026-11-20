@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réponses envoyées</title>
+
+    <!--Police-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mes-quiz.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body data-role="etudiant">
+    <div class="page">
+
+        <!--Header en haut-->
+        <header class="header">
+            <div class="profil">
+                <div class="profil-cercle"></div>
+                <span class="nom-utilisateur"></span>
+            </div>
+
+            <a href="etudiant.html" class="header-logo">
+                <img src="GetQuiz_logo.png" alt="GetQuiz">
+            </a>
+
+            <a href="connexion.html" class="btn-deconnexion">Déconnexion</a>
+        </header>
+        <!--End header-->
+
+        <main class="main-container">
+            <section class="carte carte-turquoise-clair confirmation">
+                <div class="etat-vide-icone">&#9989;</div>
+                <h2>Vos réponses ont bien été envoyées !</h2>
+                <p class="carte-texte" id="conf-titre"></p>
+                <p class="confirmation-score" id="conf-score"></p>
+                <a class="bouton bouton-turquoise" href="etudiant.html">Retour aux quiz</a>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-copy">© 2026 GetQuiz. Tous droits réservés.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="confirmation.js"></script>
+</body>
+</html>
