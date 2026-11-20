@@ -456,6 +456,41 @@ app.put('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req,
     }
 });
 
+// Supprimer une question et ses réponses
+app.delete('/api/questions/:id', verifierConnexion, verifierEnseignant, async (req, res) => {
+    try {
+        const trouve = await trouverQuestionDeLEnseignant(
+            req.params.id,
+            req.session.utilisateur.id
+        );
+
+        if (!trouve) {
+            return res.status(404).json({ message: 'Question introuvable.' });
+        }
+
+        const { question, quiz } = trouve;
+
+        if (quiz.publie) {
+            const nb = await Question.countDocuments({ quiz: quiz._id });
+
+            if (nb <= 1) {
+                return res.status(400).json({
+                    message: 'Un quiz publié doit garder au moins une question.'
+                });
+            }
+        }
+
+        await Reponse.deleteMany({ question: question._id });
+        await question.deleteOne();
+
+        res.json({ message: 'Question supprimée.' });
+
+    } catch (err) {
+        console.error('Erreur suppression question :', err.message);
+        res.status(500).json({ message: 'Erreur du serveur.' });
+    }
+});
+
 
 // ===== ÉTUDIANT =====
 // Vérifier que l'utilisateur connecté est un étudiant
